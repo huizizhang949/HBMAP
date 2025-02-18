@@ -377,7 +377,7 @@ superheat(psm_hans$psm.combined[ind,ind],
           left.label.text.size = 4)
 ```
 
-<img src="man/figures/README-superheat heatmap-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-superheat heatmap-1.png" style="display: block; margin: auto;" />
 
 ## Variable motifs
 
@@ -420,6 +420,8 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
+#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
+#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-1.png" width="60%" style="display: block; margin: auto;" />
@@ -441,6 +443,8 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
+#> Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider
+#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-2.png" width="60%" style="display: block; margin: auto;" />
