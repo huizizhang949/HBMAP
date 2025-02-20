@@ -166,11 +166,11 @@ plot(mcmc_all_hans$alpha_output, type = 'l',ylab='',main='alpha')
 
 ## ------ Acceptance rate ------
 par(mfrow=c(2,3))
-plot(unlist(mcmc_all_hans$acceptance_prob$q_star)[ind],type = 'l', ylab='', main='acceptance_q')
-plot(unlist(mcmc_all_hans$acceptance_prob$gamma_star)[ind], type = 'l', ylab='', main='acceptance_gamma')
-plot(unlist(mcmc_all_hans$acceptance_prob$alpha)[ind], type = 'l', ylab='', main='acceptance_alpha')
-plot(unlist(mcmc_all_hans$acceptance_prob$alpha_zero)[ind], type = 'l', ylab='', main='acceptance_alpha0')
-plot(unlist(mcmc_all_hans$acceptance_prob$omega)[ind], type = 'l', ylab='', main='acceptance_w')
+plot(unlist(mcmc_all_hans$acceptance_prob$q_star),type = 'l', ylab='', main='acceptance_q')
+plot(unlist(mcmc_all_hans$acceptance_prob$gamma_star), type = 'l', ylab='', main='acceptance_gamma')
+plot(unlist(mcmc_all_hans$acceptance_prob$alpha), type = 'l', ylab='', main='acceptance_alpha')
+plot(unlist(mcmc_all_hans$acceptance_prob$alpha_zero), type = 'l', ylab='', main='acceptance_alpha0')
+plot(unlist(mcmc_all_hans$acceptance_prob$omega), type = 'l', ylab='', main='acceptance_w')
 ```
 
 <img src="man/figures/README-traceplots2-2.png" width="80%" style="display: block; margin: auto;" />
@@ -377,7 +377,7 @@ superheat(psm_hans$psm.combined[ind,ind],
           left.label.text.size = 4)
 ```
 
-<img src="man/figures/README-superheat heatmap-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-superheat heatmap-1.png" width="60%" height="60%" style="display: block; margin: auto;" />
 
 ## Variable motifs
 
@@ -420,7 +420,7 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
-#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 
@@ -443,7 +443,7 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
-#> Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 
