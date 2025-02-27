@@ -2,20 +2,37 @@
 % Please edit documentation in R/synthetic_data_generation.R
 \name{data_simulation}
 \alias{data_simulation}
-\title{Title}
+\title{Generate data with noise}
 \usage{
 data_simulation(
   mcmc_run_all_output,
   Y,
-  regions.name = NULL,
   M,
   C,
+  regions.name = NULL,
   noise.levels = NULL
 )
 }
 \arguments{
-\item{noise.levels}{}
+\item{mcmc_run_all_output}{output from \code{HBMAP_mcmc} for the full algorithm.}
+
+\item{Y}{real data. a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
+
+\item{M}{number of mice to generate.}
+
+\item{C}{a vector of numbers of neurons to generate for each mouse.}
+
+\item{regions.name}{a character vector of region names.}
+
+\item{noise.levels}{a list of numeric values. For each value, the counts for \eqn{M} mice with a noise level will be generated.}
+}
+\value{
+a list of components:
+\item{theta}{one set of MCMC samples to generate the data.}
+\item{synthetic_data}{counts generated from \code{\theta} without noise.}
+\item{Z_synthetic}{allocations generated from \code{\theta}.}
+\item{noisy_synthetic_data}{if \code{noise.levels} is provided, a list of data with added noise.}
 }
 \description{
-Title
+Generate data with noise
 }

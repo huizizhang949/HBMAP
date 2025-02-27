@@ -2,13 +2,18 @@
 % Please edit documentation in R/allocation_prob.R
 \name{allocation_probability}
 \alias{allocation_probability}
-\title{Title}
+\title{Compute average allocation probabilities across all MCMC samples}
 \usage{
 allocation_probability(Y, post_output_reorder)
 }
 \arguments{
-\item{m}{}
+\item{Y}{a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
+
+\item{post_output_reorder}{output from \code{mcmc_reorder_cluster}.}
+}
+\value{
+a list of numeric vectors. Each vector represents the probabilities of neurons in a mouse belonging to their optimal cluster.
 }
 \description{
-Title
+Compute average allocation probabilities across all MCMC samples
 }

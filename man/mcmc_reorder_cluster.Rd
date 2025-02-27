@@ -2,7 +2,7 @@
 % Please edit documentation in R/cluster_reorder.R
 \name{mcmc_reorder_cluster}
 \alias{mcmc_reorder_cluster}
-\title{Title}
+\title{Relabel the allocations based on projection strengths and reorder MCMC samples from the post-processing step}
 \usage{
 mcmc_reorder_cluster(
   post_output,
@@ -13,8 +13,33 @@ mcmc_reorder_cluster(
 )
 }
 \arguments{
-\item{cred.int}{}
+\item{post_output}{output from \code{HBMAP_mcmc} that runs the post-processing step.}
+
+\item{Z}{a list of allocations (integers). Each is a vector of allocations for individual mouse.}
+
+\item{regions.name}{optional. A character vector of region names.}
+
+\item{epsilon}{a positive constant to threshold \eqn{\bm{q}_{1:J}}. Default to 0.01. It is used to determine if neurons in a cluster project to a region.}
+
+\item{cred.int}{a value between 0 and 1. The probability that the credible interval covers. It is used to summarize the posterior distribution of projection strengths.}
+}
+\value{
+a list containing the following components:
+\item{q_start_1_J_output, gamma_star_1_J_output, omega_J_M_output, omega_output}{reordered MCMC samples for
+projection strengths \eqn{\bm{q}_{1:J}}, dispersion \eqn{\bm{\gamma}_{1:J}}, local and global weights.}
+\item{proj_prob_mean, proj_prob_med, proj_prob_lower, proj_prob_upper}{posterior mean, median, lower and upper quantiles for \eqn{\bm{q}_{1:J}}.
+Each is a \eqn{J \times R} matrix.}
+\item{gamma_mean}{a vector for posterior mean of \eqn{\bm{\gamma}_{1:J}}.}
+\item{q_tilde_001}{a \eqn{J \times R} matrix with each element denoting the posterior probability of \eqn{q_{j,r}} greater than \code{epsilon}.}
+\item{cluster.labels}{a character vector giving region names each cluster projects to, based on \code{q_tilde_001} \eqn{\geq 0.5}.}
+\item{Z}{save the provided clustering.}
+\item{R, J}{number of regions, number of clusters.}
+\item{regions.name}{a character vector of region names.}
 }
 \description{
-Title
+This function relabels the allocations based on posterior mean of the projection strengths \eqn{\bm{q}_{1:J}}
+and reorder MCMC samples.
+Summary statistics are computed for \eqn{\bm{q}_{1:J}}, including posterior mean and credible intervals. Probabilities of
+\eqn{\bm{q}_{1:J}} greater than a threshold is computed to find the regions each cluster projects to (>0.5) and label the clusters.
+Posterior means are computed for dispersion \eqn{\bm{\gamma}_{1:J}}.
 }

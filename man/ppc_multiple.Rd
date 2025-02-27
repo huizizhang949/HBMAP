@@ -2,13 +2,28 @@
 % Please edit documentation in R/ppc.R
 \name{ppc_multiple}
 \alias{ppc_multiple}
-\title{Title}
+\title{Posterior predictive checks based on multiple replicates}
 \usage{
 ppc_multiple(mcmc_run_all_output, Y, N, regions.name = NULL)
 }
 \arguments{
-\item{regions.name}{}
+\item{mcmc_run_all_output}{output from \code{HBMAP_mcmc} for the full algorithm.}
+
+\item{Y}{a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
+
+\item{N}{integer. Number of replicates.}
+
+\item{regions.name}{a character vector of region names.}
+}
+\value{
+a list of components:
+\item{Y_prop}{Empirical projection strengths from the real data.}
+\item{Y_rep_prop}{a list of empirical projection strengths for each replicate.}
+\item{theta}{a list of parameters used to generate the replicates.}
+\item{non.zero.plot}{a ggplot comparing the boxplots of non-zero counts between replicates and rea -data, for each region.}
+\item{zero.plot}{a barplot comparing the number of zero counts between replicates and real data, for each region.}
 }
 \description{
-Title
+This function generates several replicates and compares the number of zero counts for each region, as well
+as the distribution of non-zero counts for each region.
 }

@@ -2,13 +2,20 @@
 % Please edit documentation in R/clustering_estimate.R
 \name{opt.clustering.comb}
 \alias{opt.clustering.comb}
-\title{Title}
+\title{Obtain an optimal clustering from MCMC samples}
 \usage{
 opt.clustering.comb(z_trace, post_similarity, max.k = NULL)
 }
 \arguments{
-\item{max.k}{}
+\item{z_trace}{a matrix of MCMC samples of allocations, with rows for samples and columns for observations. Can be output from \code{z_trace_updated}.}
+
+\item{post_similarity}{a posterior similarity matrix for all mice. Can be output from \code{similarity_matrix}.}
+
+\item{max.k}{optional. The maximum number of clusters that can be considered by the optimization algorithm}
+}
+\value{
+a vector of estimated allocations (integers).
 }
 \description{
-Title
+This function computes an optimal clustering by minimizing posterior expected variation of information.
 }

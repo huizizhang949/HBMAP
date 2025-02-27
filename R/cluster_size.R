@@ -1,16 +1,19 @@
-#' Title
+#' Summarize the size of each cluster
 #'
-#' @param clustering
-#' @param group.index
-#' @param group.name
-#' @param cluster.index
-#' @param title
-#' @param col
+#' @description
+#' This function shows a barplot of cluster size, with the option to color by groups/mice.
 #'
-#' @return
+#'
+#' @param clustering a list of allocations (integers). Each is a vector of allocations for individual mouse.
+#' @param group.index optional. A list of integers denoting the grouping, same dimension as \code{clustering}.
+#' @param group.name a character for the title of the legend.
+#' @param cluster.index optional. A vector of cluster labels (integers) to that will be plotted.
+#' @param title the title of the barplot.
+#' @param col optional. A vector of color names for the grouping.
+#'
+#' @return a barplot with cluster size given by the height of each bar. If grouping is provided, mice are colored by groups.
 #' @export
 #'
-#' @exampless
 opt.clustering.frequency <- function(clustering,
                                      group.index = NULL,
                                      group.name = 'group',

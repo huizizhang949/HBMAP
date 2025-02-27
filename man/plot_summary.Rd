@@ -2,16 +2,17 @@
 % Please edit documentation in R/summary_plot.R
 \name{plot_summary}
 \alias{plot_summary}
-\title{Title}
+\title{A summary plot for motifs}
 \usage{
 plot_summary(
   params,
   eps,
   prominent_motifs_prob,
+  prominent_motifs_thresh = 0.95,
   global_weight_thresh = 0.01,
   data.source.label = "Mouse",
   regions.name = NULL,
-  col_bar,
+  col_bar = NULL,
   col_mat = c("white", "blue"),
   height = 6,
   width = 2,
@@ -22,8 +23,46 @@ plot_summary(
 )
 }
 \arguments{
-\item{legend_y}{}
+\item{params}{a list of arguments:
+\itemize{
+\item \code{proj_prob}, posterior mean of projection strengths (a \eqn{J \times R} matrix).
+\item \code{omega_JM}, posterior mean of local weights (a \eqn{J \times M} matrix).
+\item \code{omega}, posterior mean of global weights (a vector of length \eqn{J}).
+}}
+
+\item{eps}{a list of posterior expected projection strength for all mice. Each component is the output from \code{post_epstrength}.}
+
+\item{prominent_motifs_prob}{probabilities that the global weights are greater than a threshold. output from \code{identify_prominent_motif}.}
+
+\item{prominent_motifs_thresh}{a value between 0 and 1. Default to 0.95.
+Clusters with \code{prominent_motifs_prob} greater than \code{prominent_motifs_thresh} are identified as prominent motifs. see \code{identify_prominent_motif}.}
+
+\item{global_weight_thresh}{a value between 0 and 1 to threshold the expected global weight.}
+
+\item{data.source.label}{a character for the title of the legend.}
+
+\item{regions.name}{a character vector of region names.}
+
+\item{col_bar}{A vector of color names to represent difference mice.}
+
+\item{col_mat}{A vector of 2 color names to represent low and high values of projection strengths.}
+
+\item{height}{height of the barplot on the top, for local and global weights. see \code{anno_barplot}.}
+
+\item{width}{width of the barplot on the left, for posterior expected projection strength. see \code{anno_barplot}.}
+
+\item{barwidth}{relative width of the bars, should be smaller than one. see \code{anno_barplot}.}
+
+\item{legend}{boolean. If \code{TRUE}, a legend will be shown.}
+
+\item{legend_x, legend_y.}{the \code{x} and \code{y} position of the legends, measured in current viewport. see \code{draw} from \code{ComplexHeatmap} package.}
+}
+\value{
+A summary plot. The middle shows the heatmap of projection strengths for each motif (column), with global and mouse-specific weights attached
+to each motif visualized above and the mouse-specific expected projection strength to each region on the left.
+The first block identifies prominent motifs. The second block represents motifs having a lower probability of the global weight being greater
+than a threshold (\code{thresh} in \code{identify_prominent_motif}) but the expected global weight exceeds \code{global_weight_thresh}.
 }
 \description{
-Title
+A summary plot for motifs
 }

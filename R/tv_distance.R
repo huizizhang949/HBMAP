@@ -1,15 +1,12 @@
-# Compute total variation distance in omega_JM between mice and plot a heatmap, with the option of add credible intervals
-#' Title
+#' Compute total variation distance in local weights between mice and plot a heatmap
 #'
-#' @param mcmc_run_all_output
-#' @param hpd
-#' @param prob
-#' @param text_size
+#' @param mcmc_run_all_output output from \code{HBMAP_mcmc} for the full algorithm.
+#' @param hpd boolean. If \code{TRUE}, credible intervals will be shown in the heatmap.
+#' @param prob a value between 0 and 1. The probability that the credible interval covers.
+#' @param text_size the size of the text in the heatmap.
 #'
-#' @return
+#' @return A heatmap showing the total variation distance in local weights between mice, overlaid by texts to show exact values.
 #' @export
-#'
-#' @examples
 plot_tv_distance <- function(mcmc_run_all_output, hpd=FALSE, prob=0.95, text_size=2){
 
   M <- mcmc_run_all_output$M

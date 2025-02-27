@@ -1,18 +1,17 @@
-#' Title
+#' A heatmap of empirical projection strengths grouped by the inferred clustering
 #'
-#' @param Y
-#' @param Z
-#' @param regions.name
-#' @param group.index
-#' @param group.name
-#' @param cluster.index
-#' @param col
-#' @param title
+#' @param Y a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+#' @param Z a list of allocations (integers). Each is a vector of allocations for individual mouse.
+#' @param regions.name a character vector of region names.
+#' @param group.index optional. A list of integers denoting the grouping, same dimension as \code{Z}.
+#' @param group.name a character for the title of the legend.
+#' @param cluster.index optional. A vector of cluster labels (integers) to that will be plotted.
+#' @param col optional. A vector of color names for the grouping.
+#' @param title the title of the heatmap.
 #'
-#' @return
+#' @return a heatmap of empirical projection strengths, with regions on the x-axis and mice on the y-axis.
+#' Clusters are separated by horizontal dashed lines. If grouping is provided, mice are colored by groups.
 #' @export
-#'
-#' @examples
 heatmap_ps <- function(Y,
                        Z,
                        regions.name = NULL,

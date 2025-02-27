@@ -190,7 +190,7 @@ hans_z_reordered <- z_trace_updated(mcmc_run_all_output = mcmc_all_hans)
 # optimal clustering
 set.seed(1)
 hans_Z <- opt.clustering.comb(z_trace = hans_z_reordered,
-                              post_similarity = psm_hans,
+                              post_similarity = psm_hans$psm.combined,
                               max.k = max(k))
 #> Warning in salso::salso(x = z_trace, maxNClusters = max.k): The number of
 #> possible zealous attempts exceeded the maximum. Do you really want that many
@@ -348,10 +348,11 @@ posterior similarity matrix.
 allo.prob = allocation_probability(post_output_reorder = mcmc_hans_post_reorder, 
                                    Y = data_Hans)
 
-projection_probability(Y = data_Hans,
-                       post_output_reorder = mcmc_hans_post_reorder,
-                       allocation_prob = allo.prob$allocation_probability,
-                       motif_indices = 1:mcmc_hans_post_reorder$J)
+projection_probability(Y = data_Hans, Z = hans_Z_reordered, 
+                       cluster.labels = mcmc_hans_post_reorder$cluster.labels,
+                       regions.name = rownames(data_Hans[[1]]),
+                       allocation_prob = allo.prob,
+                       cluster.index = 1:length(unique(unlist(hans_Z_reordered))))
 ```
 
 <img src="man/figures/README-allocation prob-1.png" width="60%" height="60%" style="display: block; margin: auto;" />
@@ -443,7 +444,7 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
-#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 
@@ -477,10 +478,10 @@ params_summ <- list(proj_prob = mcmc_hans_post_reorder$proj_prob_mean,
                     omega = colMeans(do.call(rbind, mcmc_hans_post_reorder$omega_output)))
 
 plot_summary(params = params_summ, eps = eps, prominent_motifs_prob = prominent_motifs$prob, 
-             global_weight_thresh = 0.01,
+             prominent_motifs_thresh = 0.95, global_weight_thresh = 0.01,
              data.source.label = 'Mouse', regions.name = rownames(data_Hans[[1]]), 
              col_bar = c("deepskyblue","darkgrey","darkturquoise","aquamarine"), col_mat = c('white','blue'), 
-             legend = TRUE, legend_x = 0.7)
+             legend = TRUE, legend_x = 0.6)
 ```
 
 <img src="man/figures/README-summary plot-1.png" width="80%" style="display: block; margin: auto;" />
@@ -506,7 +507,7 @@ print(ppc_single_result[[m]])
 
 ``` r
 
-## ----- multiple replicate: compare number of zero counts for each region and mouse (barplot) ------
+## ----- multiple replicate: compare number of zero counts for each region (barplot) ------
 ### ------ compare distribution of non-zero counts for each region (boxplot) -----------
 
 ppc_multiple_result <- ppc_multiple(mcmc_run_all_output = mcmc_all_hans,

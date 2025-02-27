@@ -2,13 +2,22 @@
 % Please edit documentation in R/tv_distance.R
 \name{plot_tv_distance}
 \alias{plot_tv_distance}
-\title{Title}
+\title{Compute total variation distance in local weights between mice and plot a heatmap}
 \usage{
 plot_tv_distance(mcmc_run_all_output, hpd = FALSE, prob = 0.95, text_size = 2)
 }
 \arguments{
-\item{text_size}{}
+\item{mcmc_run_all_output}{output from \code{HBMAP_mcmc} for the full algorithm.}
+
+\item{hpd}{boolean. If \code{TRUE}, credible intervals will be shown in the heatmap.}
+
+\item{prob}{a value between 0 and 1. The probability that the credible interval covers.}
+
+\item{text_size}{the size of the text in the heatmap.}
+}
+\value{
+A heatmap showing the total variation distance in local weights between mice, overlaid by texts to show exact values.
 }
 \description{
-Title
+Compute total variation distance in local weights between mice and plot a heatmap
 }

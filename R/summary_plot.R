@@ -1,31 +1,39 @@
-#' Title
+#' A summary plot for motifs
 #'
 #' @import ggplot2
 #'
-#' @param params
-#' @param eps
-#' @param prominent_motifs_prob
-#' @param global_weight_thresh
-#' @param data.source.label
-#' @param regions.name
-#' @param col_bar
-#' @param col_mat
-#' @param height
-#' @param width
-#' @param barwidth
-#' @param legend
-#' @param legend_x
-#' @param legend_y
+#' @param params a list of arguments:
+#' \itemize{
+#' \item \code{proj_prob}, posterior mean of projection strengths (a \eqn{J \times R} matrix).
+#' \item \code{omega_JM}, posterior mean of local weights (a \eqn{J \times M} matrix).
+#' \item \code{omega}, posterior mean of global weights (a vector of length \eqn{J}).
+#' }
+#' @param eps a list of posterior expected projection strength for all mice. Each component is the output from \code{post_epstrength}.
+#' @param prominent_motifs_prob probabilities that the global weights are greater than a threshold. output from \code{identify_prominent_motif}.
+#' @param prominent_motifs_thresh a value between 0 and 1. Default to 0.95.
+#' Clusters with \code{prominent_motifs_prob} greater than \code{prominent_motifs_thresh} are identified as prominent motifs. see \code{identify_prominent_motif}.
+#' @param global_weight_thresh a value between 0 and 1 to threshold the expected global weight.
+#' @param data.source.label a character for the title of the legend.
+#' @param regions.name a character vector of region names.
+#' @param col_bar A vector of color names to represent difference mice.
+#' @param col_mat A vector of 2 color names to represent low and high values of projection strengths.
+#' @param height height of the barplot on the top, for local and global weights. see \code{anno_barplot}.
+#' @param width width of the barplot on the left, for posterior expected projection strength. see \code{anno_barplot}.
+#' @param barwidth relative width of the bars, should be smaller than one. see \code{anno_barplot}.
+#' @param legend boolean. If \code{TRUE}, a legend will be shown.
+#' @param legend_x,legend_y. the \code{x} and \code{y} position of the legends, measured in current viewport. see \code{draw} from \code{ComplexHeatmap} package.
 #'
-#' @return
+#' @return A summary plot. The middle shows the heatmap of projection strengths for each motif (column), with global and mouse-specific weights attached
+#' to each motif visualized above and the mouse-specific expected projection strength to each region on the left.
+#' The first block identifies prominent motifs. The second block represents motifs having a lower probability of the global weight being greater
+#' than a threshold (\code{thresh} in \code{identify_prominent_motif}) but the expected global weight exceeds \code{global_weight_thresh}.
 #' @export
-#'
-#' @examples
 plot_summary <- function(params, eps,
                          prominent_motifs_prob,
+                         prominent_motifs_thresh = 0.95,
                          global_weight_thresh = 0.01,
                          data.source.label = 'Mouse', regions.name = NULL,
-                         col_bar, col_mat=c('white','blue'),
+                         col_bar=NULL, col_mat=c('white','blue'),
                          height = 6, width = 2, barwidth = 0.99,
                          legend = TRUE, legend_x = 0.9, legend_y = 0.95){
 
@@ -83,7 +91,8 @@ plot_summary <- function(params, eps,
           heatmap_legend_param = list(title = ""),
           col = col_fun,
           column_order = order(pg, decreasing = TRUE),
-          column_split = as.factor(2*(pg<0.95&weightmat[,1]<global_weight_thresh) + (pg<0.95&weightmat[,1]>global_weight_thresh)),
+          column_split = as.factor(2*(pg<prominent_motifs_thresh&weightmat[,1]<global_weight_thresh) +
+                                     (pg<prominent_motifs_thresh&weightmat[,1]>global_weight_thresh)),
           column_title_gp = grid::gpar(fontsize=0),
           border = TRUE,
           top_annotation = column_ha,
@@ -100,29 +109,25 @@ plot_summary <- function(params, eps,
 
 
 
-# Compute the posterior expected number of counts/N for each region
-# posterior expected projection strength for a new neuron
-#' Title
+#' Compute posterior expected projection strength for a new neuron
 #'
-#' @param m
-#' @param mcmc_all_out
+#' @param m integer. Index of the mouse.
+#' @param mcmc_run_all_output output from \code{HBMAP_mcmc} for the full algorithm.
 #'
-#' @return
+#' @return a numeric vector of posterior expected projection strength to each region, if the new neuron is from mouse \code{m}.
 #' @export
-#'
-#' @examples
-post_epstrength = function(m,mcmc_all_out){
+post_epstrength = function(m,mcmc_run_all_output){
 
-  R= mcmc_all_out$R
-  I = length(mcmc_all_out$alpha_output)
+  R= mcmc_run_all_output$R
+  I = length(mcmc_run_all_output$alpha_output)
 
   #output
   eps_mat = matrix(0,I,R)
 
   for(i in 1:I){
-    wjm = mcmc_all_out$omega_J_M_output[[i]][,m]
-    qstarjm = mcmc_all_out$q_star_1_J_output[[i]]
-    gammastarjm = mcmc_all_out$gamma_star_1_J_output[[i]]
+    wjm = mcmc_run_all_output$omega_J_M_output[[i]][,m]
+    qstarjm = mcmc_run_all_output$q_star_1_J_output[[i]]
+    gammastarjm = mcmc_run_all_output$gamma_star_1_J_output[[i]]
     eps_mat[i,] = epstrength(qstarjm*gammastarjm, wjm)
   }
   eps = apply(eps_mat,2,mean)

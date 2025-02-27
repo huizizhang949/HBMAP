@@ -1,21 +1,19 @@
-# --------------------------- Line plots for of empirical projection strengths within each cluster ------------------------
-#' Title
+#' Plot empirical projection strengths within each cluster
 #'
-#' @param Y
-#' @param Z
-#' @param cluster.labels
-#' @param regions.name
-#' @param group.index
-#' @param group.name
-#' @param cluster.index
-#' @param title
-#' @param facet_ncol
-#' @param col
+#' @param Y a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+#' @param Z a list of allocations (integers). Each is a vector of allocations for individual mouse.
+#' @param cluster.labels a character vector of cluster labels.
+#' @param regions.name a character vector of region names.
+#' @param group.index optional. A list of integers denoting the grouping, same dimension as \code{Z}.
+#' @param group.name a character for the title of the legend.
+#' @param cluster.index optional. A vector of cluster labels (integers) to that will be plotted.
+#' @param title the title of the plot.
+#' @param facet_ncol number of columns in the figure. Default to 5.
+#' @param col optional. A vector of color names for the grouping.
 #'
-#' @return
+#' @return A plot of \eqn{J} panels. Each panel shows the lineplots of empirical projection strengths within each cluster, with
+#' cluster label shown on the top. If grouping is provided, mice are colored by groups.
 #' @export
-#'
-#' @examples
 plot_empirical_ps <- function(Y, Z, cluster.labels = NULL, regions.name = NULL,
                               group.index = NULL, group.name = 'group',
                               cluster.index = NULL,
@@ -86,14 +84,15 @@ plot_empirical_ps <- function(Y, Z, cluster.labels = NULL, regions.name = NULL,
 }
 
 # ---------- Line plot of estimated projection strength within each cluster ----------
-#' Title
+#' Summarize the number of regions each cluster projects to
 #'
-#' @param post_output_reorder
+#' @param post_output_reorder output from \code{mcmc_reorder_cluster}.
 #'
-#' @return
+#' @return a list of the following components:
+#' \item{plot_df}{a data frame with summary statistics for projection strengths, number of regions each cluster projects to and their names.}
+#' \item{R, J}{number of regions, number of clusters.}
+#' \item{regions.name}{a character vector of region names.}
 #' @export
-#'
-#' @examples
 ps_summarize <- function(post_output_reorder){
 
   J <- post_output_reorder$J
@@ -139,18 +138,17 @@ ps_summarize <- function(post_output_reorder){
 }
 
 
-#' Title
+#' Plot the posterior mean of projection strengths with uncertainty given by credible intervals
 #'
-#' @param ps_summary
-#' @param cluster.index
-#' @param title
-#' @param facet_ncol
-#' @param col
+#' @param ps_summary output from \code{ps_summarize}.
+#' @param cluster.index optional. A vector of cluster labels (integers) to that will be plotted.
+#' @param title the title of the heatmap.
+#' @param facet_ncol number of columns in the figure. Default to 5.
+#' @param col optional. A vector of color names for the grouping.
 #'
-#' @return
+#' @return A plot of \eqn{J} panels. Each panel shows the posterior mean of projection strengths and credible intervals for each cluster, with
+#' cluster label shown on the top. Clusters are colored by the number of projected regions.
 #' @export
-#'
-#' @examples
 plot_estimated_ps <- function(ps_summary,
                               cluster.index = NULL,
                               title = '', facet_ncol = 5, col = NULL){

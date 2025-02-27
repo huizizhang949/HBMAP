@@ -2,7 +2,7 @@
 % Please edit documentation in R/line_plot.R
 \name{plot_empirical_ps}
 \alias{plot_empirical_ps}
-\title{Title}
+\title{Plot empirical projection strengths within each cluster}
 \usage{
 plot_empirical_ps(
   Y,
@@ -18,8 +18,30 @@ plot_empirical_ps(
 )
 }
 \arguments{
-\item{col}{}
+\item{Y}{a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
+
+\item{Z}{a list of allocations (integers). Each is a vector of allocations for individual mouse.}
+
+\item{cluster.labels}{a character vector of cluster labels.}
+
+\item{regions.name}{a character vector of region names.}
+
+\item{group.index}{optional. A list of integers denoting the grouping, same dimension as \code{Z}.}
+
+\item{group.name}{a character for the title of the legend.}
+
+\item{cluster.index}{optional. A vector of cluster labels (integers) to that will be plotted.}
+
+\item{title}{the title of the plot.}
+
+\item{facet_ncol}{number of columns in the figure. Default to 5.}
+
+\item{col}{optional. A vector of color names for the grouping.}
+}
+\value{
+A plot of \eqn{J} panels. Each panel shows the lineplots of empirical projection strengths within each cluster, with
+cluster label shown on the top. If grouping is provided, mice are colored by groups.
 }
 \description{
-Title
+Plot empirical projection strengths within each cluster
 }

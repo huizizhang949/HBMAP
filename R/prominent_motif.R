@@ -1,14 +1,17 @@
-# ------- Find prominent motifs -------
-#' Title
+#' Identify prominent motifs
 #'
-#' @param post_output_reorder
-#' @param thresh
-#' @param prob
+#' @description
+#' This function finds prominent motifs by computing the posterior probability of the global weights greater than a threshold.
+#' Clusters with a high posterior probability are classified as prominent motifs.
 #'
-#' @return
+#'
+#' @param post_output_reorder output from \code{mcmc_reorder_cluster}.
+#' @param thresh a value between 0 and 1. The threshold for the global weights.
+#' @param prob a value between 0 and 1. Clusters with posterior probability greater than \code{prob} are identified as prominent motifs.
+#'
+#' @return a list of: 1) a vector cluster labels (integers) identified as prominent motifs.
+#' 2) a vector of posterior probabilities that the global weights are greater than \code{thresh}.
 #' @export
-#'
-#' @examples
 identify_prominent_motif <- function(post_output_reorder, thresh=0.02, prob = 0.95){
 
   omega_J_M_output <- post_output_reorder$omega_J_M_output

@@ -1,12 +1,10 @@
-#-- Update the trace of z such that all the cluster labels are consecutive
-#' Title
+#' Update MCMC samples of allocations such that all the cluster labels are consecutive
 #'
-#' @param mcmc_run_all_output
+#' @param mcmc_run_all_output output from \code{HBMAP_mcmc}.
 #'
-#' @return
+#' @return a matrix of MCMC samples of allocations, with rows for samples and columns for observations.
 #' @export
 #'
-#' @examples
 z_trace_updated <- function(mcmc_run_all_output){
 
   # Dimensions
@@ -40,7 +38,7 @@ opt.clustering <- function(z_trace,
 
 
 
-  opt.clust <- minVI(psm = post_similarity$psm.combined,
+  opt.clust <- minVI(psm = post_similarity,
                      cls.draw = z_trace,
                      method = 'all',
                      max.k=max.k)
@@ -70,18 +68,19 @@ salso_cluster_estimate <- function(z_trace,
 
 
 
-# Function which compares minVI and dlso
 
-#' Title
+#' Obtain an optimal clustering from MCMC samples
 #'
-#' @param z_trace
-#' @param post_similarity
-#' @param max.k
+#' @description
+#' This function computes an optimal clustering by minimizing posterior expected variation of information.
 #'
-#' @return
+#'
+#' @param z_trace a matrix of MCMC samples of allocations, with rows for samples and columns for observations. Can be output from \code{z_trace_updated}.
+#' @param post_similarity a posterior similarity matrix for all mice. Can be output from \code{similarity_matrix}.
+#' @param max.k optional. The maximum number of clusters that can be considered by the optimization algorithm
+#'
+#' @return a vector of estimated allocations (integers).
 #' @export
-#'
-#' @examples
 opt.clustering.comb <- function(z_trace,
                                 post_similarity,
                                 max.k=NULL){

@@ -2,13 +2,16 @@
 % Please edit documentation in R/clustering_estimate.R
 \name{z_trace_updated}
 \alias{z_trace_updated}
-\title{Title}
+\title{Update MCMC samples of allocations such that all the cluster labels are consecutive}
 \usage{
 z_trace_updated(mcmc_run_all_output)
 }
 \arguments{
-\item{mcmc_run_all_output}{}
+\item{mcmc_run_all_output}{output from \code{HBMAP_mcmc}.}
+}
+\value{
+a matrix of MCMC samples of allocations, with rows for samples and columns for observations.
 }
 \description{
-Title
+Update MCMC samples of allocations such that all the cluster labels are consecutive
 }

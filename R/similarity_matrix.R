@@ -1,11 +1,13 @@
-#' Title
+#' Compute posterior similarity matrix
 #'
-#' @param mcmc_run_all_output
+#' @param mcmc_run_all_output output from \code{HBMAP_mcmc}.
 #'
-#' @return
+#' @return a list containing:
+#' \item{psm.within}{a list of length \eqn{M}. The \eqn{m}-th list contains \eqn{M} posterior similarity matrices
+#' recording the co-clustering probabilities between the \eqn{m}-th mouse and other mice.}
+#' \item{psm.combined}{a single posterior similarity matrix considering all mice together.}
 #' @export
 #'
-#' @examples
 similarity_matrix <- function(mcmc_run_all_output){
 
   # Input from MCMC
@@ -39,34 +41,4 @@ similarity_matrix <- function(mcmc_run_all_output){
   return(list('psm.within' = psm_within,
               'psm.combined' = psm))
 
-}
-
-similarity_matrix_mini <- function(allocation_trace){
-
-  loop.result <- lapply(1:length(allocation_trace),
-                        function(iter){
-
-
-
-                          psm.empty <- matrix(0,
-                                              nrow = length(allocation_trace[[1]]),
-                                              ncol = length(allocation_trace[[1]]))
-
-                          for(i in 1:length(allocation_trace[[1]])){
-
-                            psm.empty[i,] <- psm.empty[i,] + ifelse(allocation_trace[[iter]] == allocation_trace[[iter]][i],
-                                                                    1,
-                                                                    0)
-                          }
-
-                          psm.empty
-
-                        })
-
-
-  # Sum
-  loop.result <- Reduce('+', loop.result)
-  psm <- loop.result/length(allocation_trace)
-
-  return(psm)
 }

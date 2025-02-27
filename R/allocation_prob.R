@@ -1,41 +1,52 @@
-#' Title
+#' Plot the allocation probabilities for each motif
 #'
-#' @param Y
-#' @param post_output_reorder
-#' @param allocation_prob
-#' @param motif_indices
-#' @param ncol
+#' @param Y a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+#' @param Z a list of allocations (integers). Each is a vector of allocations for individual mouse.
+#' @param cluster.labels a character vector of cluster labels.
+#' @param regions.name a character vector of region names.
+#' @param allocation_prob a list of allocation probabilities. Output from \code{allocation_probability}.
+#' @param cluster.index optional. A vector of cluster labels (integers) to that will be plotted.
+#' @param title the title of the plot.
+#' @param facet_ncol number of columns in the figure. Default to 5.
 #'
-#' @return
+#' @return A plot of \eqn{J} panels. Each panel shows the lineplots of empirical projection strengths colored by allocation probabilities.
+#'  Clusters labels are shown on the top.
 #' @export
-#'
-#' @examples
-projection_probability <- function(Y,
-                                   post_output_reorder,
+projection_probability <- function(Y, Z, cluster.labels = NULL, regions.name = NULL,
                                    allocation_prob,
-                                   motif_indices,
-                                   ncol = 5){
+                                   cluster.index = NULL,
+                                   title = '', facet_ncol = 5){
 
 
   M <- length(Y)
   R <- dim(Y[[1]])[1]
-  Z <- post_output_reorder$Z
+  J <- length(unique(unlist(Z)))
+
+  if(is.null(cluster.labels)){
+    cluster.labels <- 1:J
+  }
+
+  if(is.null(cluster.index)){
+    cluster.index <- 1:J
+  }
+
+  if(is.null(regions.name)){
+    regions.name <- paste('region', 1:R)
+  }
 
   Y = do.call(cbind, Y)
   df0 <- t(Y)
   df0 = t(apply(df0, 1, function(x){return(x/sum(x))}))
 
-  regions.name <- post_output_reorder$regions.name
-
-  df <- lapply(motif_indices,
+  df <- lapply(cluster.index,
                function(j){
 
-                 data.frame(cluster = paste(j, ':', paste(colnames(post_output_reorder$q_tilde_001)[post_output_reorder$q_tilde_001[j,] >= 0.5], collapse = ',')),
-                            pp = as.vector(t(df0[which(unlist(post_output_reorder$Z) == j),])),
+                 data.frame(cluster = cluster.labels[j],
+                            pp = as.vector(t(df0[which(unlist(Z) == j),])),
                             region.name = regions.name,
-                            cell.index = rep(which(unlist(post_output_reorder$Z) == j), each = R),
+                            cell.index = rep(which(unlist(Z) == j), each = R),
                             # mouse.index = rep(mouse.index[which(unlist(post_output_reorder$Z) == j)], each = R),
-                            allocation_prob = rep(unlist(allocation_prob)[which(unlist(post_output_reorder$Z) == j)], each = R))
+                            allocation_prob = rep(unlist(allocation_prob)[which(unlist(Z) == j)], each = R))
                })
   df <- do.call(rbind, df)
 
@@ -53,7 +64,7 @@ projection_probability <- function(Y,
                             y = pp,
                             colour = allocation_prob,
                             group = interaction(cell.index, allocation_prob)))+
-    facet_wrap(~cluster, ncol = ncol)+
+    facet_wrap(~cluster, ncol = facet_ncol)+
     #scale_color_gradient2(low = "yellow", high = "red") +
     theme_bw()+
     xlab('region')+
@@ -63,7 +74,15 @@ projection_probability <- function(Y,
 
 }
 
-# compute average allocation probabilities across all MCMC samples
+
+
+#' Compute average allocation probabilities across all MCMC samples
+#'
+#' @param Y a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+#' @param post_output_reorder output from \code{mcmc_reorder_cluster}.
+#'
+#' @return a list of numeric vectors. Each vector represents the probabilities of neurons in a mouse belonging to their optimal cluster.
+#' @export
 allocation_probability = function(Y, post_output_reorder){
 
   M <- length(Y)
@@ -74,14 +93,6 @@ allocation_probability = function(Y, post_output_reorder){
   S <- length(post_output_reorder$omega_output)
 
   allocation_prob = list(M)
-#' Title
-#'
-#' @param m
-#'
-#' @return
-#' @export
-#'
-#' @examples
   allocation_prob_mat = lapply(1:M, function(m){
     matrix(0,C[m], J)
   })
@@ -103,8 +114,7 @@ allocation_probability = function(Y, post_output_reorder){
     })
   }
 
-  return(list('allocation_probability' = allocation_prob,
-              'allocation_probability_matrix' = allocation_prob_mat))
+  return(allocation_prob)
 
 }
 

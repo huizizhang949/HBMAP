@@ -1,17 +1,21 @@
-# --- Single replicate: compare empirical projection strengths for each mouse ------
-#' Title
+#' Posterior predictive checks based on a single replicate
 #'
-#' @param mcmc_run_all_output
-#' @param Y
-#' @param regions.name
+#' @description
+#' This function generates a single replicate of the real data and compares empirical projection strengths for each mouse
 #'
-#' @return
+#'
+#' @param mcmc_run_all_output output from \code{HBMAP_mcmc} for the full algorithm.
+#' @param Y a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+#' @param regions.name a character vector of region names.
+#' @param facet_nrow number of rows in the figure. Default to 2.
+#'
+#' @return a list of ggplots. Each ggplot corresponds to a single mouse.
+#' The plot compares the distribution of empirical projection strengths between the real data and the replicate.
 #' @export
-#'
-#' @examples
 ppc_single <- function(mcmc_run_all_output,
                        Y,
-                       regions.name = NULL){
+                       regions.name = NULL,
+                       facet_nrow = 2){
 
 
 
@@ -96,7 +100,7 @@ ppc_single <- function(mcmc_run_all_output,
                                               fill = data))+
                          geom_histogram(position = 'dodge')+
                          theme_bw()+
-                         facet_wrap(~Region, nrow = 2, scales = 'free')+
+                         facet_wrap(~Region, nrow = facet_nrow, scales = 'free')+
                          ggtitle(paste('Mouse', m))+
                          xlab('projection strength')
 
@@ -111,19 +115,25 @@ ppc_single <- function(mcmc_run_all_output,
 
 
 
-# ----- Multiple replicate: compare number of zero counts for each region and mouse ------
-# ------ compare distribution of non-zero counts for each region -----------
-#' Title
+#' Posterior predictive checks based on multiple replicates
 #'
-#' @param mcmc_run_all_output
-#' @param Y
-#' @param N
-#' @param regions.name
+#' @description
+#' This function generates several replicates and compares the number of zero counts for each region, as well
+#' as the distribution of non-zero counts for each region.
 #'
-#' @return
+#'
+#' @param mcmc_run_all_output output from \code{HBMAP_mcmc} for the full algorithm.
+#' @param Y a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+#' @param N integer. Number of replicates.
+#' @param regions.name a character vector of region names.
+#'
+#' @return a list of components:
+#' \item{Y_prop}{Empirical projection strengths from the real data.}
+#' \item{Y_rep_prop}{a list of empirical projection strengths for each replicate.}
+#' \item{theta}{a list of parameters used to generate the replicates.}
+#' \item{non.zero.plot}{a ggplot comparing the boxplots of non-zero counts between replicates and rea -data, for each region.}
+#' \item{zero.plot}{a barplot comparing the number of zero counts between replicates and real data, for each region.}
 #' @export
-#'
-#' @examples
 ppc_multiple <- function(mcmc_run_all_output,
                         Y,
                         N,

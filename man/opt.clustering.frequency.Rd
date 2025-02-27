@@ -2,7 +2,7 @@
 % Please edit documentation in R/cluster_size.R
 \name{opt.clustering.frequency}
 \alias{opt.clustering.frequency}
-\title{Title}
+\title{Summarize the size of each cluster}
 \usage{
 opt.clustering.frequency(
   clustering,
@@ -14,8 +14,21 @@ opt.clustering.frequency(
 )
 }
 \arguments{
-\item{col}{}
+\item{clustering}{a list of allocations (integers). Each is a vector of allocations for individual mouse.}
+
+\item{group.index}{optional. A list of integers denoting the grouping, same dimension as \code{clustering}.}
+
+\item{group.name}{a character for the title of the legend.}
+
+\item{cluster.index}{optional. A vector of cluster labels (integers) to that will be plotted.}
+
+\item{title}{the title of the barplot.}
+
+\item{col}{optional. A vector of color names for the grouping.}
+}
+\value{
+a barplot with cluster size given by the height of each bar. If grouping is provided, mice are colored by groups.
 }
 \description{
-Title
+This function shows a barplot of cluster size, with the option to color by groups/mice.
 }

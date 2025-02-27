@@ -1,16 +1,16 @@
-#' Title
+#' Plot posterior similarity matrix
 #'
 #' @importFrom magrittr %>%
-#' @imoprt ggplot2
-#' @param psm.ind
-#' @param psm.tot
-#' @param method
-#' @param title
+#' @import ggplot2
+#' @param psm.ind a list of posterior similarity matrices between pairwise mice. The first output from \code{similarity_matrix}.
+#' @param psm.tot a single posterior similarity for all mice together. The second output from \code{similarity_matrix}.
+#' @param method the method to perform hierarchical clustering to arrange posterior similarity matrix. see \code{hclust}.
+#' @param title the title of the first plot.
 #'
-#' @return
+#' @return two ggplots
+#' \item{plot.tot}{a heatmap of posterior similarity matrix, without separating mice.}
+#' \item{plot.ind}{a heatmap of posterior similarity matrix, with mice separated by black solid lines, the main diagonal blocks correspond to within-mouse similarity.}
 #' @export
-#'
-#' @examples
 #'
 plotpsm <- function(psm.ind,
                     psm.tot,

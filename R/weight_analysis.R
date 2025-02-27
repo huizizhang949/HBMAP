@@ -1,21 +1,21 @@
-#' Title
+#' Quantify variable motifs and brain difference
 #'
-#' @param N
-#' @param Z
-#' @param omega_output
-#' @param omega_J_M_output
-#' @param prior
-#' @param mcmc
-#' @param post
-#' @param mouse_indices
-#' @param n_cores
-#' @param cluster_type
-#' @param verbose
+#' @description
+#' This function identifies variable motifs by comparing posterior expected variance of local weights to
+#' a null setting where no brain differences are assumed. Under the null setting, motif assignments are generated
+#' identically based on the global weights. Then the algorithm is run given assignments from the null setting.
 #'
-#' @return
+#' @param N Number of simulations for the null setting.
+#' @param Z a list of allocations (integers). Each is a vector of allocations for individual mouse.
+#' @param omega_output MCMC samples for global weights. Output in \code{mcmc_reorder_cluster}.
+#' @param omega_J_M_output MCMC samples for local weights. output from \code{mcmc_reorder_cluster}.
+#' @param prior,mcmc,post,verbose see \code{HBMAP_mcmc}.
+#' @param mouse_indices indices for mice, across which the variance of local weights is computed.
+#' @param n_cores optional. Number of cores used for parallel computing.
+#' @param cluster_type see \code{makeCluster} for parallel computing.
+#'
+#' @return a data frame showing the probability that the variance given the optimal clustering is larger than the variance under the null setting.
 #' @export
-#'
-#' @examples
 local_weights_analysis <- function(N = 100,
                                    Z,
                                    omega_output,

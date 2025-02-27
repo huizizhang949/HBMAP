@@ -2,13 +2,22 @@
 % Please edit documentation in R/prominent_motif.R
 \name{identify_prominent_motif}
 \alias{identify_prominent_motif}
-\title{Title}
+\title{Identify prominent motifs}
 \usage{
 identify_prominent_motif(post_output_reorder, thresh = 0.02, prob = 0.95)
 }
 \arguments{
-\item{prob}{}
+\item{post_output_reorder}{output from \code{mcmc_reorder_cluster}.}
+
+\item{thresh}{a value between 0 and 1. The threshold for the global weights.}
+
+\item{prob}{a value between 0 and 1. Clusters with posterior probability greater than \code{prob} are identified as prominent motifs.}
+}
+\value{
+a list of: 1) a vector cluster labels (integers) identified as prominent motifs.
+2) a vector of posterior probabilities that the global weights are greater than \code{thresh}.
 }
 \description{
-Title
+This function finds prominent motifs by computing the posterior probability of the global weights greater than a threshold.
+Clusters with a high posterior probability are classified as prominent motifs.
 }

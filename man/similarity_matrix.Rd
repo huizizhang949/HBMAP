@@ -2,13 +2,19 @@
 % Please edit documentation in R/similarity_matrix.R
 \name{similarity_matrix}
 \alias{similarity_matrix}
-\title{Title}
+\title{Compute posterior similarity matrix}
 \usage{
 similarity_matrix(mcmc_run_all_output)
 }
 \arguments{
-\item{mcmc_run_all_output}{}
+\item{mcmc_run_all_output}{output from \code{HBMAP_mcmc}.}
+}
+\value{
+a list containing:
+\item{psm.within}{a list of length \eqn{M}. The \eqn{m}-th list contains \eqn{M} posterior similarity matrices
+recording the co-clustering probabilities between the \eqn{m}-th mouse and other mice.}
+\item{psm.combined}{a single posterior similarity matrix considering all mice together.}
 }
 \description{
-Title
+Compute posterior similarity matrix
 }

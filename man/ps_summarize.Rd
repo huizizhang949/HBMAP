@@ -2,13 +2,19 @@
 % Please edit documentation in R/line_plot.R
 \name{ps_summarize}
 \alias{ps_summarize}
-\title{Title}
+\title{Summarize the number of regions each cluster projects to}
 \usage{
 ps_summarize(post_output_reorder)
 }
 \arguments{
-\item{post_output_reorder}{}
+\item{post_output_reorder}{output from \code{mcmc_reorder_cluster}.}
+}
+\value{
+a list of the following components:
+\item{plot_df}{a data frame with summary statistics for projection strengths, number of regions each cluster projects to and their names.}
+\item{R, J}{number of regions, number of clusters.}
+\item{regions.name}{a character vector of region names.}
 }
 \description{
-Title
+Summarize the number of regions each cluster projects to
 }

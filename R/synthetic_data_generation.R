@@ -1,21 +1,23 @@
-#' Title
+#' Generate data with noise
 #'
-#' @param mcmc_run_all_output
-#' @param Y
-#' @param regions.name
-#' @param M
-#' @param C
-#' @param noise.levels
+#' @param mcmc_run_all_output output from \code{HBMAP_mcmc} for the full algorithm.
+#' @param Y real data. a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+#' @param M number of mice to generate.
+#' @param C a vector of numbers of neurons to generate for each mouse.
+#' @param regions.name a character vector of region names.
+#' @param noise.levels a list of numeric values. For each value, the counts for \eqn{M} mice with a noise level will be generated.
 #'
-#' @return
+#' @return a list of components:
+#' \item{theta}{one set of MCMC samples to generate the data.}
+#' \item{synthetic_data}{counts generated from \code{\theta} without noise.}
+#' \item{Z_synthetic}{allocations generated from \code{\theta}.}
+#' \item{noisy_synthetic_data}{if \code{noise.levels} is provided, a list of data with added noise.}
 #' @export
-#'
-#' @examples
 data_simulation <- function(mcmc_run_all_output,
                             Y,
-                            regions.name = NULL,
                             M,
                             C,
+                            regions.name = NULL,
                             noise.levels = NULL){
 
 

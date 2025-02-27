@@ -2,19 +2,40 @@
 % Please edit documentation in R/allocation_prob.R
 \name{projection_probability}
 \alias{projection_probability}
-\title{Title}
+\title{Plot the allocation probabilities for each motif}
 \usage{
 projection_probability(
   Y,
-  post_output_reorder,
+  Z,
+  cluster.labels = NULL,
+  regions.name = NULL,
   allocation_prob,
-  motif_indices,
-  ncol = 5
+  cluster.index = NULL,
+  title = "",
+  facet_ncol = 5
 )
 }
 \arguments{
-\item{ncol}{}
+\item{Y}{a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
+
+\item{Z}{a list of allocations (integers). Each is a vector of allocations for individual mouse.}
+
+\item{cluster.labels}{a character vector of cluster labels.}
+
+\item{regions.name}{a character vector of region names.}
+
+\item{allocation_prob}{a list of allocation probabilities. Output from \code{allocation_probability}.}
+
+\item{cluster.index}{optional. A vector of cluster labels (integers) to that will be plotted.}
+
+\item{title}{the title of the plot.}
+
+\item{facet_ncol}{number of columns in the figure. Default to 5.}
+}
+\value{
+A plot of \eqn{J} panels. Each panel shows the lineplots of empirical projection strengths colored by allocation probabilities.
+ Clusters labels are shown on the top.
 }
 \description{
-Title
+Plot the allocation probabilities for each motif
 }

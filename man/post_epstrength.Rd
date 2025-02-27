@@ -2,13 +2,18 @@
 % Please edit documentation in R/summary_plot.R
 \name{post_epstrength}
 \alias{post_epstrength}
-\title{Title}
+\title{Compute posterior expected projection strength for a new neuron}
 \usage{
-post_epstrength(m, mcmc_all_out)
+post_epstrength(m, mcmc_run_all_output)
 }
 \arguments{
-\item{mcmc_all_out}{}
+\item{m}{integer. Index of the mouse.}
+
+\item{mcmc_run_all_output}{output from \code{HBMAP_mcmc} for the full algorithm.}
+}
+\value{
+a numeric vector of posterior expected projection strength to each region, if the new neuron is from mouse \code{m}.
 }
 \description{
-Title
+Compute posterior expected projection strength for a new neuron
 }

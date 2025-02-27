@@ -2,7 +2,7 @@
 % Please edit documentation in R/line_plot.R
 \name{plot_estimated_ps}
 \alias{plot_estimated_ps}
-\title{Title}
+\title{Plot the posterior mean of projection strengths with uncertainty given by credible intervals.}
 \usage{
 plot_estimated_ps(
   ps_summary,
@@ -13,8 +13,20 @@ plot_estimated_ps(
 )
 }
 \arguments{
-\item{col}{}
+\item{ps_summary}{output from \code{ps_summarize}.}
+
+\item{cluster.index}{optional. A vector of cluster labels (integers) to that will be plotted.}
+
+\item{title}{the title of the heatmap.}
+
+\item{facet_ncol}{number of columns in the figure. Default to 5.}
+
+\item{col}{optional. A vector of color names for the grouping.}
+}
+\value{
+A plot of \eqn{J} panels. Each panel shows the posterior mean of projection strengths and credible intervals for each cluster, with
+cluster label shown on the top. Clusters are colored by the number of projected regions.
 }
 \description{
-Title
+Plot the posterior mean of projection strengths with uncertainty given by credible intervals.
 }

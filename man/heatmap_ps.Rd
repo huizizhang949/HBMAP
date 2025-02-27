@@ -2,7 +2,7 @@
 % Please edit documentation in R/heatmap_ps.R
 \name{heatmap_ps}
 \alias{heatmap_ps}
-\title{Title}
+\title{A heatmap of empirical projection strengths grouped by the inferred clustering.}
 \usage{
 heatmap_ps(
   Y,
@@ -16,8 +16,26 @@ heatmap_ps(
 )
 }
 \arguments{
-\item{title}{}
+\item{Y}{a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
+
+\item{Z}{a list of allocations (integers). Each is a vector of allocations for individual mouse.}
+
+\item{regions.name}{a character vector of region names.}
+
+\item{group.index}{optional. A list of integers denoting the grouping, same dimension as \code{Z}.}
+
+\item{group.name}{a character for the title of the legend.}
+
+\item{cluster.index}{optional. A vector of cluster labels (integers) to that will be plotted.}
+
+\item{col}{optional. A vector of color names for the grouping.}
+
+\item{title}{the title of the heatmap.}
+}
+\value{
+a heatmap of empirical projection strengths, with regions on the x-axis and mice on the y-axis.
+Clusters are separated by horizontal dashed lines. If grouping is provided, mice are colored by groups.
 }
 \description{
-Title
+A heatmap of empirical projection strengths grouped by the inferred clustering.
 }

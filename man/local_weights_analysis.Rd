@@ -2,7 +2,7 @@
 % Please edit documentation in R/weight_analysis.R
 \name{local_weights_analysis}
 \alias{local_weights_analysis}
-\title{Title}
+\title{Quantify variable motifs and brain difference}
 \usage{
 local_weights_analysis(
   N = 100,
@@ -19,8 +19,27 @@ local_weights_analysis(
 )
 }
 \arguments{
-\item{verbose}{}
+\item{N}{Number of simulations for the null setting.}
+
+\item{Z}{a list of allocations (integers). Each is a vector of allocations for individual mouse.}
+
+\item{omega_output}{MCMC samples for global weights. Output in \code{mcmc_reorder_cluster}.}
+
+\item{omega_J_M_output}{MCMC samples for local weights. output from \code{mcmc_reorder_cluster}.}
+
+\item{prior, mcmc, post, verbose}{see \code{HBMAP_mcmc}.}
+
+\item{mouse_indices}{indices for mice, across which the variance of local weights is computed.}
+
+\item{n_cores}{optional. Number of cores used for parallel computing.}
+
+\item{cluster_type}{see \code{makeCluster} for parallel computing.}
+}
+\value{
+a data frame showing the probability that the variance given the optimal clustering is larger than the variance under the null setting.
 }
 \description{
-Title
+This function identifies variable motifs by comparing posterior expected variance of local weights to
+a null setting where no brain differences are assumed. Under the null setting, motif assignments are generated
+identically based on the global weights. Then the algorithm is run given assignments from the null setting.
 }

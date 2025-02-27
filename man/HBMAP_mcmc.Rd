@@ -2,7 +2,7 @@
 % Please edit documentation in R/HPMAP_mcmc.R
 \name{HBMAP_mcmc}
 \alias{HBMAP_mcmc}
-\title{Title}
+\title{A hierarchical Bayesian mixture for high-throughput axon projections}
 \usage{
 HBMAP_mcmc(
   Y = NULL,
@@ -16,8 +16,69 @@ HBMAP_mcmc(
 )
 }
 \arguments{
-\item{verbose}{}
+\item{Y}{a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
+Mandatory to run the full algorithm, or the post-processing step for sampling \eqn{q} and \eqn{\gamma}.}
+
+\item{J}{integer. Number of clusters to be found. Mandatory to run the full algorithm.}
+
+\item{mcmc}{a list of MCMC arguments:
+\itemize{
+\item \code{number_iter}, number of iterations. Default to 6000.
+\item \code{burn_in}, number of iterations to discard as burn-in. Default to 3000.
+\item \code{thinning}, after burn-in, save the sample at every \code{thinning} iterations. Default to 5.
+\item \code{adaptive_prop}, a small positive constant used in adaptive MCMC algorithm.
+A larger value will propose a new sample more likely to be different from the previous sample. Default to 0.001.
+\item \code{auto_save, save_path, save_frequency}, If \code{auto_save} is \code{TRUE} (default is \code{FALSE}), intermediate results will be saved
+to the path \code{save_path} at every \code{save_frequency} iterations (default is 100).
+\code{save_path} is mandatory if \code{auto_save} is \code{TRUE}, and should contain the name of the saved results.
+}}
+
+\item{prior}{a list giving the prior information:
+\itemize{
+\item \code{a_gamma, b_gamma, lb_gamma}, shape, rate parameters and lower bound for \eqn{\gamma_j} in the truncated Gamma prior.
+Default values are the median of neurons' total projection counts, 2 and 1.
+\item \code{a, tau, nu}, parameters in the repulsive prior of \eqn{\bm{q}_{1:J}}.
+The concentration parameters in the Dirichlet prior are given by \code{a}*(average empirical projection strength across mice).
+\code{tau,nu} are relevant to the repulsive term, where \code{tau} represents the separation between components
+and \code{nu} denotes how strong the repulsion is. Default values are 2, 0.4, 1/20.
+\item \code{a_alpha, b_alpha}, shape and rate parameters for the concentration parameter in the mouse-specific Dirichlet process. Both are default to 1.
+\item \code{a_alpha0, b_alpha0}, shape and rate parameters for the concentration parameter in the baseline Dirichlet process. Both are default to 1.
+}}
+
+\item{Z.fix}{a list of allocations (integers). Each is a vector of allocations for individual mouse. Mandatory to run the post-processing step with a fixed clustering.}
+
+\item{post}{a list of arguments for the post-processing step:
+\itemize{
+\item \code{run_q_gamma}, boolean. Whether to sample \eqn{\bm{q}_{1:J}} and \eqn{\bm{\gamma}_{1:J}}. Default to \code{TRUE}.
+\item \code{run_omega}, boolean. Whether to sample local and global weights. Default to \code{TRUE}.
+}}
+
+\item{Z.init}{Initial values for the allocations to run the full algorithm (optional).}
+
+\item{verbose}{Default to \code{TRUE}, show progress bar.}
+}
+\value{
+The output is a list containing the following components:
+\item{output_index}{total number of saved MCMC samples.}
+\item{allocation_probability}{for the full algorithm, the allocation probabilities for each neuron. It is \code{NULL} for the post-processing step.}
+\item{Z_output}{for the full algorithm, a list of samples for allocations. Each element of the list is a list of allocations for all mice.}
+\item{omega_J_M_output}{a list of samples for the local weights. Each element of the list is a \eqn{J \times M} matrix.}
+\item{omega_output}{a list of samples for the global weights. Each element of the list is a vector of length \eqn{J}.}
+\item{alpha_output, alpha_zero_output}{a vector of samples for two concentration parameters, respectively.}
+\item{q_star_1_J_output}{a list of samples for projection strengths \eqn{\bm{q}_{1:J}}. Each element of the list is a \eqn{J \times R} matrix.}
+\item{gamma_star_1_J_output}{a list of samples for dispersion \eqn{\bm{\gamma}_{1:J}}. Each element of the list is a vector of length \eqn{J}.}
+\item{acceptance_prob}{average acceptance probabilities over iterations for global weights,
+two concentration parameters in the Dirichlet processes, and cluster-specific projection strengths \eqn{\bm{q}_{1:J}} and dispersion \eqn{\bm{\gamma}_{1:J}}.}
+\item{M, C, R, J}{number of mice, a vector of numbers of neurons for mice, number of regions, number of clusters.}
+\item{Z}{for the post-processing step, save the provided fixed clustering. It is \code{NULL} for the full algorithm.}
+\item{post}{a boolean value indicating whether the post-processing is run or not.}
 }
 \description{
-Title
+A hierarchical Bayesian mixture for high-throughput axon projections
+}
+\examples{
+mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop = 0.0001,
+      auto_save = FALSE, save_path = NULL, save_frequency = 1000)
+set.seed(3)
+mcmc_all_run <- HBMAP_mcmc(Y = Y, J = J, mcmc = mcmc_list, verbose = FALSE)
 }

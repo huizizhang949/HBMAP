@@ -2,13 +2,23 @@
 % Please edit documentation in R/ppc.R
 \name{ppc_single}
 \alias{ppc_single}
-\title{Title}
+\title{Posterior predictive checks based on a single replicate}
 \usage{
-ppc_single(mcmc_run_all_output, Y, regions.name = NULL)
+ppc_single(mcmc_run_all_output, Y, regions.name = NULL, facet_nrow = 2)
 }
 \arguments{
-\item{regions.name}{}
+\item{mcmc_run_all_output}{output from \code{HBMAP_mcmc} for the full algorithm.}
+
+\item{Y}{a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
+
+\item{regions.name}{a character vector of region names.}
+
+\item{facet_nrow}{number of rows in the figure. Default to 2.}
+}
+\value{
+a list of ggplots. Each ggplot corresponds to a single mouse.
+The plot compares the distribution of empirical projection strengths between the real data and the replicate.
 }
 \description{
-Title
+This function generates a single replicate of the real data and compares empirical projection strengths for each mouse
 }
