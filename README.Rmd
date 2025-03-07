@@ -25,7 +25,7 @@ knitr::knit_hooks$set(imgcenter = function(before, options, envir){
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of HBMAP is to ...
+The goal of HBMAP is to implement a model-based clustering approach through hierarchical Bayesian mixtures for high-throughput mapping of axon projections. The model allows for identifying groups of neurons with unique projection patterns across different brain regions, and investigates differences across experiments.
 
 ## Installation
 
@@ -47,7 +47,7 @@ library(HBMAP)
 ```
 
 ```{r data, warning=FALSE}
-load("man/data_Hans.RData")
+data("data_Hans")
 
 M <- length(data_Hans)
 C <- sapply(1:M, function(m) ncol(data_Hans[[m]]))
@@ -86,7 +86,7 @@ wss = apply(matrix(seq(6,40,1),ncol=1),1,function(x){
   kmeans_result <- kmeans(df, centers = x, nstart = 25)
   kmeans_result$tot.withinss
 })
-ggplot() + geom_point(aes(x=seq(6,40,1),y=wss))
+ggplot() + geom_point(aes(x=seq(6,40,1),y=wss)) + theme_bw()
 
 # Based on the plot, 20 seems like a reasonable number of clusters to start with
 # initial clustering

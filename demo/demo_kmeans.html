@@ -13,7 +13,7 @@
 
 <meta name="date" content="2025-02-27" />
 
-<title>K-means models for MapSeq</title>
+<title>K-means models for MAPseq</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -350,7 +350,7 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">K-means models for MapSeq</h1>
+<h1 class="title toc-ignore">K-means models for MAPseq</h1>
 <h4 class="author">Huizi Zhang</h4>
 <h4 class="date">2025-02-27</h4>
 
@@ -362,7 +362,7 @@ sampling.</p>
 <pre class="r"><code># load required packages
 library(ggplot2)
 library(HBMAP)</code></pre>
-<pre class="r"><code>load(&quot;man/data_Hans.RData&quot;)
+<pre class="r"><code>data(&quot;data_Hans&quot;)
 
 M &lt;- length(data_Hans)
 C &lt;- sapply(1:M, function(m) ncol(data_Hans[[m]]))
@@ -374,12 +374,13 @@ mouse.index &lt;- c(rep(1, C[1]),
                  rep(3, C[3]),
                  rep(4, C[4]))</code></pre>
 <p>Implement the k-means model with varying choices of data
-transformation: row-sum normalization, log of row-sum normalization,
-max-row normalization, cosine normalization.</p>
+transformation through the argument <code>transformation</code>: row-sum
+normalization, log of row-sum normalization, max-row normalization,
+cosine normalization.</p>
 <pre class="r"><code>set.seed(43)
-Z &lt;- k_means_exon(Y = data_Hans, k = 20, trans = &#39;log row-sum&#39;, restart = 20, iter.max = 100)
+Z &lt;- k_means_axon(Y = data_Hans, k = 20, transformation = &#39;log row-sum&#39;, restart = 20, iter.max = 100)
 
-# if cluster labels are not continuous, run the following
+# make sure cluster labels are not continuous
 Z_unlist &lt;- unlist(Z)
 uniq_cl &lt;- unique(Z_unlist)
 J &lt;- length(uniq_cl)
@@ -392,7 +393,11 @@ for(j in 1:J){
 C_cumsum &lt;- c(0, cumsum(C))
 Z &lt;- lapply(1:M,
             function(m) Z_updated[(C_cumsum[m]+1):C_cumsum[m+1]])
-rm(Z_updated)</code></pre>
+rm(Z_updated, C_cumsum, unique_cl, Z_unlist, Z_updated, j, J)
+#&gt; Warning in rm(Z_updated, C_cumsum, unique_cl, Z_unlist, Z_updated, j, J):
+#&gt; object &#39;unique_cl&#39; not found
+#&gt; Warning in rm(Z_updated, C_cumsum, unique_cl, Z_unlist, Z_updated, j, J):
+#&gt; object &#39;Z_updated&#39; not found</code></pre>
 <p>Next, we reorder the clusters based on the average empirical
 strengths within each cluster and label each cluster by thresholding the
 average empirical strengths.</p>
@@ -402,13 +407,13 @@ average_ps &lt;- avg_ps(Y = data_Hans, Z = Z)
 kmeans_reorder &lt;- reorder_cluster(proj_strength = average_ps, Z = Z)
 # allocations after reordering
 kmeans_Z_reorder &lt;- kmeans_reorder$Z
-# label clusters based on average_ps &gt; thresh
+# label clusters by projection regions with average_ps &gt; thresh
 thresh &lt;- 0.05
 cluster.labels &lt;- sapply(1:length(unique(unlist(kmeans_Z_reorder))),function(j) {
     paste(j, &#39;:&#39;, paste(rownames(data_Hans[[1]])[average_ps[j,] &gt;= thresh], collapse = &#39;,&#39;))
   })</code></pre>
 <p>Below we summarize cluster size, visualize neuron projection
-strengths within each cluster and estimated projection strength.</p>
+strengths within each cluster.</p>
 <pre class="r"><code># you can choose your preferred color palette (change &#39;col&#39; argument)
 ## ------ cluster size: number of neurons in each cluster, colored by group (mouse/injection site) ---------
 opt.clustering.frequency(clustering = kmeans_Z_reorder, group.index = mouse.index, group.name = &#39;mouse&#39;, 

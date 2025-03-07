@@ -2,7 +2,7 @@
 % Please edit documentation in R/line_plot.R
 \name{plot_estimated_ps}
 \alias{plot_estimated_ps}
-\title{Plot the posterior mean of projection strengths with uncertainty given by credible intervals.}
+\title{Plot the posterior mean of projection strengths with uncertainty given by credible intervals}
 \usage{
 plot_estimated_ps(
   ps_summary,
@@ -28,5 +28,5 @@ A plot of \eqn{J} panels. Each panel shows the posterior mean of projection stre
 cluster label shown on the top. Clusters are colored by the number of projected regions.
 }
 \description{
-Plot the posterior mean of projection strengths with uncertainty given by credible intervals.
+Plot the posterior mean of projection strengths with uncertainty given by credible intervals
 }

@@ -5,7 +5,7 @@
 #'
 #' @param Y a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
 #' @param k number of clusters to be found.
-#' @param trans type of data transformation. Default to 'row-sum'. Can also be one of the following:
+#' @param transformation type of data transformation. Default to 'row-sum'. Can also be one of the following:
 #' \itemize{
 #' \item 'row-sum': normalize each neuron by its total counts.
 #' \item 'log row-sum': after row-sum normalization, take log(y+1).
@@ -20,8 +20,8 @@
 #'
 #' @examples
 #' set.seed(43)
-#' Z <- k_means_exon(Y = Y, k = 20, trans = 'log row-sum', restart = 20, iter.max = 100)
-k_means_exon <- function(Y, k, trans = 'row-sum',
+#' Z <- k_means_axon(Y = Y, k = 20, transformation = 'log row-sum', restart = 20, iter.max = 100)
+k_means_axon <- function(Y, k, transformation = 'row-sum',
                          restart = 50, iter.max = 100){
 
   # Number of mouse
@@ -35,17 +35,17 @@ k_means_exon <- function(Y, k, trans = 'row-sum',
 
   Y_cbind <- do.call(cbind, Y)
 
-  if(trans == 'row_sum'){
+  if(transformation == 'row_sum'){
     # Projection probabilities, neurons in the rows
     df <- t(apply(t(Y_cbind), 1, function(x){return(x/sum(x))}))
-  }else if (trans == 'log row-sum'){
+  }else if (transformation == 'log row-sum'){
 
     df <- t(apply(t(Y_cbind), 1, function(x){return(x/sum(x))}))
     df <- log(df+1)
-  }else if (trans == 'max-row'){
+  }else if (transformation == 'max-row'){
 
     df <- t(apply(t(Y_cbind), 1, function(x){return(x/max(x))}))
-  }else if (trans == 'cosine'){
+  }else if (transformation == 'cosine'){
 
     # df <- t(apply(t(Y_cbind), 1, function(x){return(x/max(x))}))
     df <- t(Y_cbind)

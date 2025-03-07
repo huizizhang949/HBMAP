@@ -1,18 +1,20 @@
 Package: HBMAP
 Type: Package
-Title:  A hierarchical Bayesian mixture for high-throughput axon projections
+Title: A hierarchical Bayesian mixture for high-throughput axon projections
 Version: 0.1.0
-Author: person("Sara", "Wade", email = "sara.wade@ed.ac.uk",
-                  role = c("aut", "cre"))
+Author: c(person("Sara", "Wade", email = "sara.wade@ed.ac.uk",
+                  role = c("aut", "cre")),
         person("Jinlu", "Liu", email = "Jinlu.Liu@ed.ac.uk",
-        role = c("aut", "cre"))
+        role = c("aut", "cre")),
         person("Huizi", "Zhang", email = "H.Zhang-144@sms.ed.ac.uk",
-                  role = c("aut", "cre"))
+                  role = c("aut", "cre")),
+        person("Gulsen", "Surmeli", email = "gsurmeli@exseed.ed.ac.uk",
+                  role = c("aut", "cre")),
         person("Edward", "Agboraw", email = "s1605280@sms.ed.ac.uk",
-                  role = c("aut", "cre"))
+                  role = c("aut", "cre")))
 Maintainer: Huizi Zhang <H.Zhang-144@sms.ed.ac.uk>
 Description: This package implements a model-based clustering approach 
-    thourgh hierarchical Bayesian mixtures for high-throughput mapping of 
+    through hierarchical Bayesian mixtures for high-throughput mapping of 
     axon projections. The model allows for identifying groups of neurons 
     with unique projection patterns across different brain regions, 
     and investigates differences across experiments.
@@ -43,3 +45,5 @@ Imports:
     coda,
     ComplexHeatmap,
     grid
+Depends: 
+    R (>= 2.10)

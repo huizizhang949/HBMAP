@@ -29,8 +29,8 @@ data_simulation(
 \value{
 a list of components:
 \item{theta}{one set of MCMC samples to generate the data.}
-\item{synthetic_data}{counts generated from \code{\theta} without noise.}
-\item{Z_synthetic}{allocations generated from \code{\theta}.}
+\item{synthetic_data}{counts generated from \code{theta} without noise.}
+\item{Z_synthetic}{allocations generated from \code{theta}.}
 \item{noisy_synthetic_data}{if \code{noise.levels} is provided, a list of data with added noise.}
 }
 \description{

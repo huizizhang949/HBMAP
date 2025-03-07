@@ -31,7 +31,7 @@ library(HBMAP)
 
 
 ```{r data, warning=FALSE}
-load("man/data_Hans.RData")
+data("data_Hans")
 
 M <- length(data_Hans)
 C <- sapply(1:M, function(m) ncol(data_Hans[[m]]))
@@ -44,11 +44,11 @@ mouse.index <- c(rep(1, C[1]),
                  rep(4, C[4]))
 ```
 
-Implement the k-means model with varying choices of data transformation: row-sum normalization, log of row-sum normalization, max-row normalization, cosine normalization.
+Implement the k-means model with varying choices of data transformation through the argument `transformation`: row-sum normalization, log of row-sum normalization, max-row normalization, cosine normalization.
 
 ```{r kmeans}
 set.seed(43)
-Z <- k_means_exon(Y = data_Hans, k = 20, trans = 'log row-sum', restart = 20, iter.max = 100)
+Z <- k_means_axon(Y = data_Hans, k = 20, transformation = 'log row-sum', restart = 20, iter.max = 100)
 
 # make sure cluster labels are not continuous
 Z_unlist <- unlist(Z)

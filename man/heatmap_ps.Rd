@@ -2,7 +2,7 @@
 % Please edit documentation in R/heatmap_ps.R
 \name{heatmap_ps}
 \alias{heatmap_ps}
-\title{A heatmap of empirical projection strengths grouped by the inferred clustering.}
+\title{A heatmap of empirical projection strengths grouped by the inferred clustering}
 \usage{
 heatmap_ps(
   Y,
@@ -37,5 +37,5 @@ a heatmap of empirical projection strengths, with regions on the x-axis and mice
 Clusters are separated by horizontal dashed lines. If grouping is provided, mice are colored by groups.
 }
 \description{
-A heatmap of empirical projection strengths grouped by the inferred clustering.
+A heatmap of empirical projection strengths grouped by the inferred clustering
 }

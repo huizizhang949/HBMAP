@@ -6,7 +6,11 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of HBMAP is to …
+The goal of HBMAP is to implement a model-based clustering approach
+through hierarchical Bayesian mixtures for high-throughput mapping of
+axon projections. The model allows for identifying groups of neurons
+with unique projection patterns across different brain regions, and
+investigates differences across experiments.
 
 ## Installation
 
@@ -40,7 +44,7 @@ library(HBMAP)
 ```
 
 ``` r
-load("man/data_Hans.RData")
+data("data_Hans")
 
 M <- length(data_Hans)
 C <- sapply(1:M, function(m) ncol(data_Hans[[m]]))
@@ -79,7 +83,7 @@ wss = apply(matrix(seq(6,40,1),ncol=1),1,function(x){
   kmeans_result <- kmeans(df, centers = x, nstart = 25)
   kmeans_result$tot.withinss
 })
-ggplot() + geom_point(aes(x=seq(6,40,1),y=wss))
+ggplot() + geom_point(aes(x=seq(6,40,1),y=wss)) + theme_bw()
 ```
 
 <img src="man/figures/README-empirical estiamtes-1.png" width="60%" style="display: block; margin: auto;" />
@@ -421,7 +425,7 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
-#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 
@@ -444,8 +448,6 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
-#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
-#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-2.png" width="60%" style="display: block; margin: auto;" />
