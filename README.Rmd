@@ -172,7 +172,7 @@ plot(unlist(mcmc_all_hans$acceptance_prob$omega), type = 'l', ylab='', main='acc
 
 ## Optimal clustering
 
-```{r optimal clustering, out.width='60%', fig.align='center'}
+```{r optimal clustering, out.width='60%', fig.align='center', warning=FALSE}
 
 # Posterior similarity matrix
 psm_hans = similarity_matrix(mcmc_run_all_output = mcmc_all_hans)
