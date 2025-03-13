@@ -1,7 +1,7 @@
 
 
 binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model = "two",
-                            makeLines = FALSE, groups){
+                            makeLines = FALSE){
 
   M <- length(data)
   C <- sapply(1:length(data), function(m) ncol(data[[m]]))
