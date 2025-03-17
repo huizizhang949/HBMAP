@@ -35,13 +35,13 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
 
   if(binom_model == "one"){
 
-    p_e <- fzero(function(x) Nf - N_0*(1-(1-x)^nrow(data)), 0.5)$x
-    print(p_e)
+    p_e <- pracma::fzero(function(x) Nf - N_0*(1-(1-x)^nrow(data)), 0.5)$x
+
+    p_i <- rep(p_e, R)
 
     # Compute the expected count for different number of projecting motifs
     expected_number <- sapply(1:nrow(data),
                               function(r){
-
                                 N_0*p_e^(r)*(1-p_e)^(R-r)
                               })
 
@@ -52,9 +52,15 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
   }
 
   # Find the set of unique clusters
-  cluster_neuron <- sapply(1:ncol(data),
-                           function(c) paste(rownames(data)[data[,c] >= bin_thresh],
-                                             collapse = " "))
+  if (bin_thresh != 0){
+    cluster_neuron <- sapply(1:ncol(data),
+                             function(c) paste(rownames(data)[data[,c] >= bin_thresh],
+                                               collapse = " "))
+  }else{
+    cluster_neuron <- sapply(1:ncol(data),
+                             function(c) paste(rownames(data)[data[,c] > bin_thresh],
+                                               collapse = " "))
+  }
 
   # Unique set of cluster
   cluster_label <- unique(cluster_neuron)
