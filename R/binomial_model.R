@@ -1,7 +1,16 @@
-
-
-binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model = "two",
-                            makeLines = FALSE){
+#' Binomial Motif Analysis of MAPseq data
+#'
+#' @param data a list of matrices. Each is a region-by-neuron projection count matrix for an individual brain.
+#' @param bin_thresh the binarization threshold. Barcode counts below threshold become 0. Barcode counts above threshold become 1.
+#' @param pval_cutoff p-value threshold. Only motifs with p-values smaller than this threshold will be deemed "significant".
+#' @param binom_model binomial model algorithm used. Options = c("one","two). Default = "two".
+#'
+#' @returns results (list of motif analysis results)
+#' @export
+#'
+#' @examples
+#' res = binomial_model(list_of_matrices, bin_thresh = 5, pval_cutoff = 0.05, binom_model = "two")
+binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model = "two"){
 
   M <- length(data)
   C <- sapply(1:length(data), function(m) ncol(data[[m]]))
@@ -20,8 +29,7 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
                  function(r) length(which(data[r,] > bin_thresh)))
   }
 
-  N_0 <- round(fzero(function(x) Nf - x*(1-prod(1-si/x)), Nf)$x, 0)
-  print(N_0)
+  N_0 <- round(pracma::fzero(function(x) Nf - x*(1-prod(1-si/x)), Nf)$x, 0)
 
   #Divergence Point - calculating p(e)
 
@@ -60,7 +68,7 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
 
 
 
-
+  `%notin%` <- Negate(`%in%`)
   # Separate allocations
   C_cumsum <- c(0, cumsum(C))
 
@@ -70,7 +78,7 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
 
   cluster_summary <- data.frame(cluster_name = cluster_label,
                                 N_projecting_regions = sapply(1:length(cluster_label),
-                                                              function(i) length(str_split(cluster_label[[i]], pattern = ' ')[[1]]))
+                                                              function(i) length(stringr::str_split(cluster_label[[i]], pattern = ' ')[[1]]))
   )
 
   if (binom_model == "two"){
@@ -79,8 +87,8 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
     cluster_summary$size_expect <- sapply(1:nrow(cluster_summary),
                                           function(j){
 
-                                            prod(c(p_i[which(rownames(data) %in%  str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])],
-                                                   1-p_i[which(rownames(data) %notin%  str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])]))*N_0
+                                            prod(c(p_i[which(rownames(data) %in%  stringr::str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])],
+                                                   1-p_i[which(rownames(data) %notin%  stringr::str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])]))*N_0
                                           }
     )
   }else{
@@ -95,7 +103,7 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
                                           function(j) length(which(cluster_neuron == cluster_label[j])))
 
   cluster_summary <- cluster_summary %>%
-    mutate(cluster.type = ifelse(size_expect < size_observed, 'over-represented', 'under-represented'))
+    dplyr::mutate(cluster.type = ifelse(size_expect < size_observed, 'over-represented', 'under-represented'))
 
   #Calculate p-values
 
@@ -111,8 +119,8 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
     cluster_summary$p_value <- sapply(1:nrow(cluster_summary),
                                       function(j) pbinom(q = cluster_summary$size_observed[j],
                                                          size = N_0,
-                                                         prob = prod(c(p_i[which(rownames(data) %in%  str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])],
-                                                                       1-p_i[which(rownames(data) %notin%  str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])]))
+                                                         prob = prod(c(p_i[which(rownames(data) %in%  stringr::str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])],
+                                                                       1-p_i[which(rownames(data) %notin%  stringr::str_split(cluster_summary$cluster_name[[j]], pattern = ' ')[[1]])]))
                                       ))
 
   }
@@ -148,7 +156,7 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
   upset = upset_plot(cluster_summary)
 
   plot_output <- cluster_summary %>%
-    filter(N_projecting_regions > 1) %>%
+    dplyr::filter(N_projecting_regions > 1) %>%
     ggplot(mapping = aes(x = log(size_observed/size_expect, base = 2),
                          y = -log(p_value, base = 10)))+
     geom_point()+
@@ -166,6 +174,16 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
               'upset_plot' = upset))
 }
 
+
+#' Generate Motif Analysis Upset Plot
+#'
+#' @param cluster_summary data.frame describing key features of all identified motifs
+#'
+#' @returns Motif Analysis Upset Plot
+#' @export
+#'
+#' @examples
+#' chart = upset_plot(res$cluster_summary)
 upset_plot = function(cluster_summary){
 
   #create barchart
@@ -219,7 +237,7 @@ upset_plot = function(cluster_summary){
 
   }
 
-  comb_df <- bind_rows(lapply(names(all_motifs), function(set_name) {
+  comb_df <- dplyr::bind_rows(lapply(names(all_motifs), function(set_name) {
     data.frame(Set = set_name, Element = all_motifs[[set_name]])
   }), .id = "id")
 
@@ -232,8 +250,8 @@ upset_plot = function(cluster_summary){
 
   # Create a column for grouping lines (each set)
   comb_df <- comb_df %>%
-    group_by(Set) %>%
-    mutate(row_number = row_number())
+    dplyr::group_by(Set) %>%
+    dplyr::mutate(row_number = dplyr::row_number())
 
   comb_mat = ggplot(comb_df, aes(x = Set, y = Element, group = Set)) +
     geom_point(size = 4) +  # Dots
@@ -245,13 +263,24 @@ upset_plot = function(cluster_summary){
 
 
   #create combined chart
-  figure <- ggarrange(barchart, comb_mat,
+  figure <- ggpubr::ggarrange(barchart, comb_mat,
                       nrow = 2,
                       align = "v",
                       heights = c(1.5,1))
   return(figure)
 }
 
+
+#' Compare motif analysis results
+#'
+#' @param results_1 binomial model results object for Brain 1
+#' @param results_2 binomial model results object for Brain 2
+#'
+#' @returns paired barchart comparing the estimated per-region projection probabilities of Brain 1 and Brain 2.
+#' @export
+#'
+#' @examples
+#' compare_brains(brain1_results, brain2_results)
 compare_brains = function(results_1, results_2){
 
   estimates_1 = res$estimates
@@ -276,3 +305,4 @@ compare_brains = function(results_1, results_2){
   return(comp_figure)
 
 }
+
