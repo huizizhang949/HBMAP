@@ -21,7 +21,7 @@ knitr::knit_hooks$set(imgcenter = function(before, options, envir){
 })
 ```
 
-First, we load the data and necessary functions for MCMC sampling.
+First, we load the input data and necessary functions
 
 ```{r package}
 # load required packages
