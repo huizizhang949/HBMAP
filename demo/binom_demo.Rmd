@@ -44,21 +44,40 @@ mouse.index <- c(rep(1, C[1]),
                  rep(4, C[4]))
 ```
 
-Implement Binomial Model 2 with a binarization threshold of 5
-
-```{r binom}
-res <- binomial_model(data_Hans, bin_thresh = 5)
+Implement Binomial Model 1 with a binarization threshold of 5
+```{r binom 1}
+res1 <- binomial_model(data_Hans, bin_thresh = 5, binom_model = "one")
 
 #save motif (cluster) allocations
-Z <- res$allocation
+Z1 <- res$allocation
 
 #visualize results
-res$plot_output
-res$upset_plot
+res1$plot_output
+res1$upset_plot
 
 ```
 
+Implement Binomial Model 2 with a binarization threshold of 5
+
+```{r binom}
+res2 <- binomial_model(data_Hans, bin_thresh = 5)
+
+#save motif (cluster) allocations
+Z2 <- res2$allocation
+
+#visualize results
+res2$plot_output
+res2$upset_plot
+
+```
+Compare Results (Binomial Model 1 vs. Binomial Model 2)
+```{r binom compare}
+compare_brains(res1, res2)
+```
+
 ```{r binom arrange cluster labels}
+#Use Binomial Model 2 results for further analysis
+Z = Z2
 # make sure cluster labels are not continuous
 Z_unlist <- unlist(Z)
 uniq_cl <- unique(Z_unlist)
