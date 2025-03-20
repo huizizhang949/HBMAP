@@ -243,6 +243,8 @@ ppc_multiple <- function(mcmc_run_all_output,
 
     geom_boxplot(outlier.shape = NA)+
     theme_bw()+
+    # rotate region names labels
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
     ylab('projection strength')
 
   zero.prop <- rbind(Y_prop_df,
@@ -257,6 +259,8 @@ ppc_multiple <- function(mcmc_run_all_output,
     geom_bar(stat = 'identity',
              position = position_dodge())+
     theme_bw()+
+    # rotate region names labels
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
     ylab('Number of zeros')
 
 

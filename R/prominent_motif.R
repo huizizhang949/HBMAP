@@ -14,11 +14,10 @@
 #' @export
 identify_prominent_motif <- function(post_output_reorder, thresh=0.02, prob = 0.95){
 
-  omega_J_M_output <- post_output_reorder$omega_J_M_output
   omega_output <- post_output_reorder$omega_output
   C <- sapply(post_output_reorder$Z, length)
 
-  if((is.null(omega_J_M_output) || is.null(omega_output))){stop('Need to run the post-processing step for sampling omega!')}
+  if(is.null(omega_output)){stop('Need to run the post-processing step for sampling omega!')}
 
   print(paste('With a threshold of', thresh, 'we identify motifs where we would expect at least', thresh*sum(C), 'neurons in that motif across all mice'))
   omega_mat = matrix(unlist(post_output_reorder$omega_output),

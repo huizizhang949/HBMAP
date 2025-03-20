@@ -29,7 +29,7 @@ plot_tv_distance <- function(mcmc_run_all_output, hpd=FALSE, prob=0.95, text_siz
   colnames(tv_mean) = as.factor(1:M)
 
   tv_mean = data.frame(tv_mean, "Mouse.1" = as.factor(1:M))
-  colnames(tv_mean)[1:4] <- as.factor(1:M)
+  colnames(tv_mean)[1:M] <- as.factor(1:M)
   tv_mean <-  tidyr::pivot_longer(tv_mean,
                            cols = !Mouse.1,
                            names_to = "Mouse.2",

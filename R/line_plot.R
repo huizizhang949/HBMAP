@@ -182,10 +182,10 @@ plot_estimated_ps <- function(ps_summary,
     xlab('region')+
     labs(color = 'no. of regions', title = title) +
     facet_wrap(~factor(cluster_label, levels = unique(cluster_label)), ncol = facet_ncol)+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
-    theme(axis.text=element_text(size=10),
-          axis.title=element_text(size=10),
-          plot.title = element_text(size=10))
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    # theme(axis.text=element_text(size=10),
+    #       axis.title=element_text(size=10),
+    #       plot.title = element_text(size=10))
 
 
     if(!is.null(col)){
