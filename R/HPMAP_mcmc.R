@@ -367,7 +367,7 @@ HBMAP_mcmc <- function(Y = NULL,
     covariance_component_new <- matrix(0,
                                        nrow = J-1,
                                        ncol = J-1)
-    scaling_omega = 0.1
+    scaling_omega = 0.01
 
     # alpha
     variance_alpha_new <- 0.1

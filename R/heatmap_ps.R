@@ -25,7 +25,7 @@ heatmap_ps <- function(Y,
   J <- max(unlist(Z))
   R <- nrow(Y[[1]])
   M <- length(Y)
-  C <- sapply(1:M, function(m) ncol(data_Hans[[m]]))
+  C <- sapply(1:M, function(m) ncol(Y[[m]]))
   C_cumsum <- c(0, cumsum(C))
 
   if(is.null(regions.name)){
@@ -134,12 +134,14 @@ heatmap_ps <- function(Y,
           panel.background = element_blank()) +
     #draws x and y axis line
     theme(axis.line = element_line(color = 'black'))+
+    # rotate region names labels
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
     ylab('neurons')+
 
     geom_hline(yintercept = cumsum(N.j)[-length(cumsum(N.j))],
-               color = 'blue',
+               color = 'grey',
                linetype = 'dashed',
-               linewidth = 0.05)+
+               linewidth = 0.5)+
 
     ggtitle(title)
 

@@ -72,6 +72,8 @@ plot_empirical_ps <- function(Y, Z, cluster.labels = NULL, regions.name = NULL,
     ylab('projection strength')+
     guides(color = guide_legend(title=group.name))+
     ggtitle(title)+
+    # rotate region names labels
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
   if(length(unique(group.index))==1){

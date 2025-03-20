@@ -419,8 +419,6 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
-#> Warning: ggrepel: 7 unlabeled data points (too many overlaps). Consider
-#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-1.png" width="60%" style="display: block; margin: auto;" />
