@@ -90,7 +90,7 @@ plot_summary <- function(params, eps,
           show_column_names = TRUE,
           heatmap_legend_param = list(title = ""),
           col = col_fun,
-          column_order = order(pg, decreasing = TRUE),
+          column_order = order(weightmat[,1], decreasing = TRUE),
           column_split = as.factor(2*(pg<prominent_motifs_thresh&weightmat[,1]<global_weight_thresh) +
                                      (pg<prominent_motifs_thresh&weightmat[,1]>global_weight_thresh)),
           column_title_gp = grid::gpar(fontsize=0),
