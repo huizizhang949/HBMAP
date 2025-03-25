@@ -192,42 +192,96 @@ binomial_model <- function(data, bin_thresh = 0, pval_cutoff = 0.05, binom_model
 #' chart = upset_plot(res$cluster_summary)
 upset_plot = function(cluster_summary){
 
-  #create barchart
+  cluster_summary$motif_num = seq_len(nrow(cluster_summary))
+
+  sig = cluster_summary$significant
+  type = cluster_summary$cluster.type
+
+  gr = c()
+  for (i in 1:length(sig)){
+
+    sig_val = sig[i]
+    type_val = type[i]
+
+    if(sig_val == "significant" & type_val == "over-represented" ){
+      gr = c(gr,1)
+    }else if (sig_val == "significant" & type_val == "under-represented" ){
+      gr = c(gr,2)
+    }else if (sig_val == "insignificant"){
+      gr = c(gr,3)
+    }
+  }
+
+  `%notin%` <- Negate(`%in%`)
+  #format colour vector
+  if(1 %notin% gr){
+
+    gr_cols = c("green", "grey", "brown", "gray")
+    gr_cols_comb = c("green", "brown")
+
+  }else if (2 %notin% gr){
+
+    gr_cols = c("red","grey","brown","grey")
+    gr_cols_comb = c("red", "brown")
+
+  }else if (3 %notin% gr){
+
+    gr_cols = c("red","grey","green","grey")
+    gr_cols_comb = c("red", "green")
+
+  }else{
+
+    gr_cols = c("red", "grey", "green", "gray", "brown", "gray")
+    gr_cols_comb = c("red", "green", "brown")
+
+  }
+
+  #reorder based on group
+  cluster_summary$group = gr
+  cluster_summary <- cluster_summary[order(cluster_summary$group, -cluster_summary$size_observed),]
+
   motifs = cluster_summary$cluster_name
+  mnum = cluster_summary$motif_num
   obs = cluster_summary$size_observed
   exp = cluster_summary$size_expect
+
+  ordered_group = cluster_summary$group
 
   #create Obs dataframe
   df1 = data.frame(
     motif = motifs,
     condition = "observed",
-    count = obs
+    count = obs,
+    motif_num = mnum,
+    group = ordered_group
   )
-  df1$motif_num = as.factor(seq_len(nrow(df1)))
+  df1$motif_num = factor(df1$motif_num, levels = df1$motif_num)
 
   #create Exp dataframe
   df2 = data.frame(
     motif = motifs,
     condition = "expected",
-    count = exp
+    count = exp,
+    motif_num = mnum,
+    group = ordered_group
   )
-  df2$motif_num = as.factor(seq_len(nrow(df2)))
+  df2$motif_num = factor(df2$motif_num, levels = df2$motif_num)
 
-
-  #Concatenate together = long format dataframe
   df3 = rbind(df2, df1)
 
-  barchart = ggplot(df3, aes(fill=condition, y=count, x=motif_num)) +
-    geom_bar(position="dodge", stat="identity", width = 0.7) +
+  #create paired barchart
+  barchart = ggplot(df3, aes(fill = interaction(condition, group), y = count, x = motif_num)) +
+    geom_bar(position = "dodge", stat = "identity", width = 0.7) +
     ylab("Total Barcode Count") +
     theme_minimal() +
-    theme(axis.title.x=element_blank(),
-          axis.text.x=element_blank(),
-          legend.position = "top",
-          plot.margin = unit(c(0,0,0,0.5), 'lines'))
+    theme(axis.title.x = element_blank(),
+          axis.text.x = element_blank(),
+          axis.title.y = element_blank(),
+          legend.position = "none",
+          plot.margin = unit(c(0,0,0,0.5), 'lines')) +
+    scale_fill_manual(values = gr_cols)
 
   #make combination matrix
-
   all_motifs = list()
 
   i = 1
@@ -235,24 +289,25 @@ upset_plot = function(cluster_summary){
 
     x_vector = list(strsplit(x, " "))[[1]]
 
-    name = paste("Motif_", as.character(i), sep="")
-
     all_motifs[as.character(i)] = x_vector
 
     i = i + 1
 
   }
 
+  #create combination matrix
   comb_df <- dplyr::bind_rows(lapply(names(all_motifs), function(set_name) {
     data.frame(Set = set_name, Element = all_motifs[[set_name]])
   }), .id = "id")
 
+  comb_df <- dplyr::bind_rows(lapply(seq_along(all_motifs), function(i) {
+    data.frame(Set = names(all_motifs)[i],
+               Element = all_motifs[[i]],
+               Group = ordered_group[i])
+  }), .id = "id")
+
   comb_df$Set = as.integer(comb_df$Set)
   comb_df$Set = as.factor(comb_df$Set)
-
-  # Ensure Elements are ordered for plotting
-  comb_df$Element <- factor(comb_df$Element,
-                            levels = rev(unique(unlist(all_motifs))))
 
   # Create a column for grouping lines (each set)
   comb_df <- comb_df %>%
@@ -260,15 +315,16 @@ upset_plot = function(cluster_summary){
     dplyr::mutate(row_number = dplyr::row_number())
 
   comb_mat = ggplot(comb_df, aes(x = Set, y = Element, group = Set)) +
-    geom_point(size = 4) +  # Dots
-    geom_line(aes(group = Set), linewidth = 1) +  # Connecting lines
+    geom_point(size = 4, aes(colour=factor(Group))) +  # Dots
+    geom_line(aes(group = Set, colour=factor(Group)), linewidth = 1) +  # Connecting lines
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
-          plot.margin = unit(c(0,0,0,0), 'lines')) +
-    labs(x = "", y = "", title = "") # no text
+          plot.margin = unit(c(0,0,0,0), 'lines'),
+          legend.position = "none") +
+    labs(x = "", y = "", title = "") + # no text
+    scale_x_discrete(labels= mnum) + #correct x-axis labels
+    scale_colour_manual(values = gr_cols_comb)
 
-
-  #create combined chart
   figure <- ggpubr::ggarrange(barchart, comb_mat,
                       nrow = 2,
                       align = "v",
@@ -289,8 +345,8 @@ upset_plot = function(cluster_summary){
 #' compare_brains(brain1_results, brain2_results)
 compare_brains = function(results_1, results_2){
 
-  estimates_1 = res$estimates
-  estimates_2 = res2$estimates
+  estimates_1 = results_1$estimates
+  estimates_2 = results_2$estimates
 
   regions = rownames(results_1$data)
 
@@ -311,4 +367,3 @@ compare_brains = function(results_1, results_2){
   return(comp_figure)
 
 }
-
