@@ -50,7 +50,7 @@ Implement the k-means model with varying choices of data transformation through 
 set.seed(43)
 Z <- k_means_axon(Y = data_Hans, k = 20, transformation = 'log row-sum', restart = 20, iter.max = 100)
 
-# make sure cluster labels are not continuous
+# make sure cluster labels are continuous
 Z_unlist <- unlist(Z)
 uniq_cl <- unique(Z_unlist)
 J <- length(uniq_cl)
