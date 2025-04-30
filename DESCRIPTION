@@ -44,6 +44,9 @@ Imports:
     tidyr,
     coda,
     ComplexHeatmap,
-    grid
+    grid,
+    pracma,
+    stringr,
+    ggpubr
 Depends: 
     R (>= 2.10)

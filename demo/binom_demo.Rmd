@@ -1,0 +1,135 @@
+---
+  title: "Binomial models for MAPseq"
+author: "Edward Agboraw"
+date: "2025-03-13"
+output: html_document
+---
+
+  ```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi=300,
+  comment = "#>",
+  fig.path = "man/figures/README-"
+)
+knitr::knit_hooks$set(imgcenter = function(before, options, envir){
+  if (before) {
+    HTML("<p align='center'>")
+  } else {
+    HTML("</p>")
+  }
+})
+```
+
+First, we load the input data and necessary functions
+
+```{r package}
+# load required packages
+library(ggplot2)
+library(HBMAP)
+```
+
+
+```{r data, warning=FALSE}
+data("data_Hans")
+
+M <- length(data_Hans)
+C <- sapply(1:M, function(m) ncol(data_Hans[[m]]))
+R <- dim(data_Hans[[1]])[1]
+
+# Mouse index
+mouse.index <- c(rep(1, C[1]),
+                 rep(2, C[2]),
+                 rep(3, C[3]),
+                 rep(4, C[4]))
+```
+
+Implement Binomial Model 1 with a binarization threshold of 5
+```{r binom 1}
+res1 <- binomial_model(data_Hans, bin_thresh = 5, binom_model = "one")
+
+#save motif (cluster) allocations
+Z1 <- res1$allocation
+
+#visualize results
+res1$plot_output
+res1$upset_plot
+
+```
+
+Implement Binomial Model 2 with a binarization threshold of 5
+
+```{r binom}
+res2 <- binomial_model(data_Hans, bin_thresh = 5)
+
+#save motif (cluster) allocations
+Z2 <- res2$allocation
+
+#visualize results
+res2$plot_output
+res2$upset_plot
+
+```
+Compare Results (Binomial Model 1 vs. Binomial Model 2)
+```{r binom compare}
+compare_brains(res1, res2)
+```
+
+```{r binom arrange cluster labels}
+#Use Binomial Model 2 results for further analysis
+Z = Z2
+# make sure cluster labels are continuous
+Z_unlist <- unlist(Z)
+uniq_cl <- unique(Z_unlist)
+J <- length(uniq_cl)
+Z_updated <- rep(0,sum(C))
+for(j in 1:J){
+  Z_updated[Z_unlist==uniq_cl[j]]=j
+}
+# rearrange in a list
+# Cumulative number of neurons in a vector form
+C_cumsum <- c(0, cumsum(C))
+Z <- lapply(1:M,
+            function(m) Z_updated[(C_cumsum[m]+1):C_cumsum[m+1]])
+rm(Z_updated, C_cumsum, uniq_cl, Z_unlist, j, J)
+```
+
+Next, we reorder the clusters based on the average empirical strengths within each cluster and label each cluster by thresholding the average empirical strengths.
+
+```{r reorder-binomial-cluster}
+# compute average empirical strengths for each motif
+average_ps <- avg_ps(Y = data_Hans, Z = Z)
+# reorder
+binomial_reorder <- reorder_cluster(proj_strength = average_ps, Z = Z)
+# allocations after reordering
+binomial_Z_reorder <- binomial_reorder$Z
+# label clusters by projection regions with average_ps > thresh
+thresh <- 0.05
+cluster.labels <- sapply(1:length(unique(unlist(binomial_Z_reorder))),function(j) {
+  paste(j, ':', paste(rownames(data_Hans[[1]])[average_ps[j,] >= thresh], collapse = ','))
+})
+```
+
+Below we summarize cluster size, visualize neuron projection strengths within each cluster.
+
+```{r cluster summary and line plots, message=FALSE, out.width='70%', fig.align='center'}
+# you can choose your preferred color palette (change 'col' argument)
+## ------ cluster size: number of neurons in each cluster, colored by group (mouse/injection site) ---------
+opt.clustering.frequency(clustering = binomial_Z_reorder, group.index = mouse.index, group.name = 'mouse',
+                         title = 'Cluster size')
+
+## ---------- Heatmap of empirical projection strength of neurons in each cluster, colored by group (mouse/injection site) ----------
+heatmap_ps(Y = data_Hans, Z = binomial_Z_reorder, regions.name = rownames(data_Hans[[1]]),
+           group.index = mouse.index, group.name = 'mouse',
+           cluster.index = 1:length(unique(unlist(binomial_Z_reorder))), title = '')
+
+
+## --------- Line plot for of empirical projection strengths within each cluster ------------------------
+plot_empirical_ps(Y = data_Hans, Z = binomial_Z_reorder,
+                  cluster.labels = cluster.labels,
+                  regions.name = rownames(data_Hans[[1]]),
+                  group.index = mouse.index, group.name = 'mouse',
+                  cluster.index = 1:length(unique(unlist(binomial_Z_reorder))),
+                  title = 'Empirical projection strength', facet_ncol = 5)
+
+```
