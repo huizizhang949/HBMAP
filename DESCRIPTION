@@ -24,6 +24,7 @@ LazyData: true
 RoxygenNote: 7.3.2
 LinkingTo: 
     Rcpp
+biocViews:
 Imports: 
     Rcpp,
     ggplot2,
