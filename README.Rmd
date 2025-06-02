@@ -349,12 +349,15 @@ mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop
 )
 post_list <- list(run_omega=TRUE, run_q_gamma=FALSE)
 # increase N to obtain more reliable results, e.g. N=200
+# For windows users, use cluster_type='PSOCK',
 set.seed(2)
 local_weights_analysis_vc <- local_weights_analysis(N = 50, Z = mcmc_hans_post_reorder$Z, 
                                                     omega_output = mcmc_hans_post_reorder$omega_output,
                                                     omega_J_M_output = mcmc_hans_post_reorder$omega_J_M_output, 
                                                     prior = prior_list, mcmc = mcmc_list, 
-                                                    post = post_list, n_cores=4, verbose = FALSE)
+                                                    post = post_list, n_cores=4, 
+                                                    cluster_type = 'FORK',
+                                                    verbose = FALSE)
 
 ```
 

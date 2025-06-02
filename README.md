@@ -391,12 +391,15 @@ mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop
 )
 post_list <- list(run_omega=TRUE, run_q_gamma=FALSE)
 # increase N to obtain more reliable results, e.g. N=200
+# For windows users, use cluster_type='PSOCK',
 set.seed(2)
 local_weights_analysis_vc <- local_weights_analysis(N = 50, Z = mcmc_hans_post_reorder$Z, 
                                                     omega_output = mcmc_hans_post_reorder$omega_output,
                                                     omega_J_M_output = mcmc_hans_post_reorder$omega_J_M_output, 
                                                     prior = prior_list, mcmc = mcmc_list, 
-                                                    post = post_list, n_cores=4, verbose = FALSE)
+                                                    post = post_list, n_cores=4, 
+                                                    cluster_type = 'FORK',
+                                                    verbose = FALSE)
 ```
 
 The results are summarized in the following figures.
@@ -419,7 +422,7 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
-#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 9 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 
@@ -442,8 +445,6 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
-#> Warning: ggrepel: 9 unlabeled data points (too many overlaps). Consider
-#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-2.png" width="60%" style="display: block; margin: auto;" />
