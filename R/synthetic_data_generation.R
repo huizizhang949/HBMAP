@@ -24,6 +24,7 @@ data_simulation <- function(mcmc_run_all_output,
 
   length_per_chain <- length(mcmc_run_all_output$Z_output)
 
+  J <- mcmc_run_all_output$J
   C_data <- mcmc_run_all_output$C
   R <- mcmc_run_all_output$R
   M_data <- mcmc_run_all_output$M
@@ -53,7 +54,7 @@ data_simulation <- function(mcmc_run_all_output,
   # Distribution for counts
   mu = max(mean(unlist(N_CM)-min_N),1)
   disp = mu^2/max(var(unlist(N_CM)-min_N)-mu,1)
-  # Cluster-specific paramters
+  # Cluster-specific parameters
   mu_j_star = sapply(1:J, function(j){
     if(sum(unlist(theta$Z)==j)<1){
       mu_j = mu
