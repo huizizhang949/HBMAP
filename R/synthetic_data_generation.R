@@ -2,7 +2,7 @@
 #'
 #' @param mcmc_run_all_output output from \code{HBMAP_mcmc} for the full algorithm.
 #' @param Y real data. a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.
-#' @param M number of mice to generate.
+#' @param M number of mice to generate. need to be less than (or equal to) the number of mice in the real data.
 #' @param C a vector of numbers of neurons to generate for each mouse.
 #' @param regions.name a character vector of region names.
 #' @param noise.levels a list of numeric values. For each value, the counts for \eqn{M} mice with a noise level will be generated.
@@ -25,16 +25,16 @@ data_simulation <- function(mcmc_run_all_output,
   length_per_chain <- length(mcmc_run_all_output$Z_output)
 
   J <- mcmc_run_all_output$J
-  C_data <- mcmc_run_all_output$C
+  # C_data <- mcmc_run_all_output$C
   R <- mcmc_run_all_output$R
-  M_data <- mcmc_run_all_output$M
+  # M_data <- mcmc_run_all_output$M
 
   if(is.null(regions.name)){
     regions.name <- paste('region', 1:R)
   }
 
 
-  # Sum of counts for each neuron cell
+  # Sum of counts for each neuron in the real data
   N_CM <- lapply(1:M,
                  function(m) colSums(Y[[m]]))
   min_N <- min(unlist(N_CM))
@@ -51,7 +51,7 @@ data_simulation <- function(mcmc_run_all_output,
                 alpha = mcmc_run_all_output$alpha_output[target.index],
                 Z = mcmc_run_all_output$Z[[target.index]])
 
-  # Distribution for counts
+  # Distribution to generate the total count for each neuron
   mu = max(mean(unlist(N_CM)-min_N),1)
   disp = mu^2/max(var(unlist(N_CM)-min_N)-mu,1)
   # Cluster-specific parameters

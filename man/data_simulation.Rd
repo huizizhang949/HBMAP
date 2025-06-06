@@ -18,7 +18,7 @@ data_simulation(
 
 \item{Y}{real data. a list of matrices. Each is a region-by-neuron matrix of projection counts for individual mouse.}
 
-\item{M}{number of mice to generate.}
+\item{M}{number of mice to generate. need to be less than (or equal to) the number of mice in the real data.}
 
 \item{C}{a vector of numbers of neurons to generate for each mouse.}
 
