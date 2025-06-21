@@ -103,10 +103,14 @@ heatmap_ps <- function(Y,
                 function(j) length(which(unlist(Z)==j)))
 
   # Convert to data frame for plotting
+  # subset for cluster.index
+  index <- unlist(lapply(1:M,function(m) {
+    sapply(Z[[m]],function(x) x %in% cluster.index)
+  }))
   Y.prop.df <- data.frame(region = rep(regions.name,
-                                       ncol(Y.prop.cbind)),
+                                       ncol(Y.prop.cbind[,index])),
 
-                          neuron = rep(1:ncol(Y.prop.cbind),
+                          neuron = rep(1:ncol(Y.prop.cbind[,index]),
                                        each = length(regions.name)),
 
                           projection.strength = as.vector(df0),
