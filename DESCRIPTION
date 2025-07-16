@@ -48,6 +48,9 @@ Imports:
     grid,
     pracma,
     stringr,
-    ggpubr
+    ggpubr,
+    HBMAP (>= 0.1.0)
 Depends: 
     R (>= 2.10)
+Remotes:  
+    huizizhang949/HBMAP
