@@ -4,6 +4,9 @@
 # HBMAP
 
 <!-- badges: start -->
+
+[![Launch Rstudio
+Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/huizizhang949/HBMAP/master?urlpath=rstudio)
 <!-- badges: end -->
 
 The goal of HBMAP is to implement a model-based clustering approach
@@ -28,6 +31,7 @@ First, we load the data and necessary functions for MCMC sampling.
 # load required packages
 library(ggplot2)
 library(ggrepel)
+#> Warning: package 'ggrepel' was built under R version 4.3.3
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
@@ -37,9 +41,6 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
-```
-
-``` r
 library(HBMAP)
 ```
 
@@ -373,6 +374,7 @@ projection_probability(Y = data_Hans, Z = hans_Z_reordered,
 # install.packages("devtools")
 # devtools::install_github("rlbarter/superheat")
 library(superheat)
+#> Warning: package 'superheat' was built under R version 4.3.3
 Z_factored = as.character(unlist(hans_Z_reordered))
 ind = sapply(unlist(hans_Z_reordered), function(z){
   any(z == prominent_motifs$index)
@@ -410,7 +412,7 @@ local_weights_analysis_vc <- local_weights_analysis(N = 50, Z = mcmc_hans_post_r
                                                     omega_J_M_output = mcmc_hans_post_reorder$omega_J_M_output, 
                                                     prior = prior_list, mcmc = mcmc_list, 
                                                     post = post_list, n_cores=4, 
-                                                    cluster_type = 'FORK',
+                                                    cluster_type = 'PSOCK',
                                                     verbose = FALSE)
 ```
 
@@ -434,8 +436,6 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
-#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
-#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-1.png" width="60%" style="display: block; margin: auto;" />
@@ -457,7 +457,7 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
-#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 11 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 

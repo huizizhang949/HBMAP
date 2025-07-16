@@ -365,7 +365,7 @@ local_weights_analysis_vc <- local_weights_analysis(N = 50, Z = mcmc_hans_post_r
                                                     omega_J_M_output = mcmc_hans_post_reorder$omega_J_M_output, 
                                                     prior = prior_list, mcmc = mcmc_list, 
                                                     post = post_list, n_cores=4, 
-                                                    cluster_type = 'FORK',
+                                                    cluster_type = 'PSOCK',
                                                     verbose = FALSE)
 
 ```
