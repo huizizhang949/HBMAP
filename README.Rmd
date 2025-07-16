@@ -123,9 +123,9 @@ prior_list = list(a_gamma = a_gamma, b_gamma = b_gamma, lb_gamma = 1, a = 2, tau
 
 
 # ------- Run the full model ---------
-set.seed(3)
+set.seed(5)
 mcmc_all_hans <- HBMAP_mcmc(Y = data_Hans, J = J, mcmc = mcmc_list, prior = prior_list, 
-                            Z.init = clustinit, verbose = FALSE)
+                            Z.init = clustinit, verbose = TRUE)
 
 ```
 
@@ -350,7 +350,8 @@ mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop
 post_list <- list(run_omega=TRUE, run_q_gamma=FALSE)
 # increase N to obtain more reliable results, e.g. N=200
 set.seed(2)
-local_weights_analysis_vc <- local_weights_analysis(N = 50, Z = mcmc_hans_post_reorder$Z, 
+local_weights_analysis_vc <- local_weights_analysis(N = 20, cluster_type = "PSOCK",
+                                                    Z = mcmc_hans_post_reorder$Z, 
                                                     omega_output = mcmc_hans_post_reorder$omega_output,
                                                     omega_J_M_output = mcmc_hans_post_reorder$omega_J_M_output, 
                                                     prior = prior_list, mcmc = mcmc_list, 

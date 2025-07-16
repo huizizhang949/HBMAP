@@ -49,7 +49,7 @@ Implement Binomial Model 1 with a binarization threshold of 5
 res1 <- binomial_model(data_Hans, bin_thresh = 5, binom_model = "one")
 
 #save motif (cluster) allocations
-Z1 <- res$allocation
+Z1 <- res1$allocation
 
 #visualize results
 res1$plot_output
@@ -91,7 +91,7 @@ for(j in 1:J){
 C_cumsum <- c(0, cumsum(C))
 Z <- lapply(1:M,
             function(m) Z_updated[(C_cumsum[m]+1):C_cumsum[m+1]])
-rm(Z_updated, C_cumsum, unique_cl, Z_unlist, Z_updated, j, J)
+rm(Z_updated, C_cumsum, uniq_cl, Z_unlist, j, J)
 ```
 
 Next, we reorder the clusters based on the average empirical strengths within each cluster and label each cluster by thresholding the average empirical strengths.
