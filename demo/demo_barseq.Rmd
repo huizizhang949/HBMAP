@@ -188,12 +188,19 @@ barseq_Z <- lapply(1:M,
 Posterior similarity matrix can be used to quantify the uncertainty in clustering.
 
 ```{r psm, out.width='60%', fig.align='center'}
-# Plot of posterior similarity matrix
-psm_barseq_plot <- plotpsm(psm.ind = psm_barseq$psm.within,
-                           psm.tot = psm_barseq$psm.combined)
+# Plot of posterior similarity matrix with separation of mice (set group=FALSE to remove separation)
+# Note that this function may take long to run if there is a large number of neurons
+psm_hans_plot <- plotpsm(psm.ind = psm_hans$psm.within,
+                         psm.tot = psm_hans$psm.combined,
+                         group = TRUE)
+psm_hans_plot
 
-psm_barseq_plot$plot.ind
-
+# To plot posterior similarity matrix for a single mouse, provide the index
+# psm_hans_plot_single <- plotpsm(psm.ind = psm_hans$psm.within,
+#                                 psm.tot = psm_hans$psm.combined,
+#                                 index = 1)
+# 
+# psm_hans_plot_single
 ```
 
 
@@ -304,8 +311,9 @@ projection_probability(Y = data_barseq, Z = barseq_z_reordered,
 ```
 
 ```{r superheat heatmap, out.width='60%',out.height='60%', fig.align='center'}
-# plot the posterior similarity matrix for prominent motifs only
-# to install the superheat package:
+# Plot the posterior similarity matrix for prominent motifs only
+# Note that this function may take long to run if there is a large number of neurons
+# To install the superheat package:
 # install.packages("devtools")
 # devtools::install_github("rlbarter/superheat")
 library(superheat)

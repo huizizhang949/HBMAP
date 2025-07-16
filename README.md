@@ -209,14 +209,25 @@ Posterior similarity matrix can be used to quantify the uncertainty in
 clustering.
 
 ``` r
-# Plot of posterior similarity matrix
+# Plot of posterior similarity matrix with separation of mice (set group=FALSE to remove separation)
+# Note that this function may take long to run if there is a large number of neurons
 psm_hans_plot <- plotpsm(psm.ind = psm_hans$psm.within,
-                         psm.tot = psm_hans$psm.combined)
-
-psm_hans_plot$plot.ind
+                         psm.tot = psm_hans$psm.combined,
+                         group = TRUE)
+psm_hans_plot
 ```
 
 <img src="man/figures/README-psm-1.png" width="60%" style="display: block; margin: auto;" />
+
+``` r
+
+# To plot posterior similarity matrix for a single mouse, provide the index
+# psm_hans_plot_single <- plotpsm(psm.ind = psm_hans$psm.within,
+#                                 psm.tot = psm_hans$psm.combined,
+#                                 index = 1)
+# 
+# psm_hans_plot_single
+```
 
 # Post-processing step with a fixed clustering
 
@@ -356,8 +367,9 @@ projection_probability(Y = data_Hans, Z = hans_Z_reordered,
 <img src="man/figures/README-allocation prob-1.png" width="60%" height="60%" style="display: block; margin: auto;" />
 
 ``` r
-# plot the posterior similarity matrix for prominent motifs only
-# to install the superheat package:
+# Plot the posterior similarity matrix for prominent motifs only
+# Note that this function may take long to run if there is a large number of neurons
+# To install the superheat package:
 # install.packages("devtools")
 # devtools::install_github("rlbarter/superheat")
 library(superheat)
@@ -422,7 +434,7 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
-#> Warning: ggrepel: 9 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 
@@ -445,6 +457,8 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
+#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
+#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-2.png" width="60%" style="display: block; margin: auto;" />

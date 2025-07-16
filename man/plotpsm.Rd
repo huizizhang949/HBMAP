@@ -4,21 +4,32 @@
 \alias{plotpsm}
 \title{Plot posterior similarity matrix}
 \usage{
-plotpsm(psm.ind, psm.tot, method = "complete", title = "")
+plotpsm(
+  psm.ind,
+  psm.tot,
+  group = TRUE,
+  index = NULL,
+  method = "complete",
+  title = ""
+)
 }
 \arguments{
 \item{psm.ind}{a list of posterior similarity matrices between pairwise mice. The first output from \code{similarity_matrix}.}
 
 \item{psm.tot}{a single posterior similarity for all mice together. The second output from \code{similarity_matrix}.}
 
+\item{group}{logical. If TRUE, the posterior similarity matrix will be separated by mice.}
+
+\item{index}{Optional. An integer that indexes the mice. If provided, the posterior similarity matrix will only be plotted for the selected mouse.}
+
 \item{method}{the method to perform hierarchical clustering to arrange posterior similarity matrix. see \code{hclust}.}
 
 \item{title}{the title of the first plot.}
 }
 \value{
-two ggplots
-\item{plot.tot}{a heatmap of posterior similarity matrix, without separating mice.}
-\item{plot.ind}{a heatmap of posterior similarity matrix, with mice separated by black solid lines, the main diagonal blocks correspond to within-mouse similarity.}
+If \code{group} is TRUE and \code{index} is not provided, the function returns a heatmap of posterior similarity matrix, with mice separated by black solid lines,
+the main diagonal blocks correspond to within-mouse similarity. If \code{index} is provided, the function returns a heatmap of posterior similarity matrix for a single mouse.
+Otherwise a complete heatmap with no separation of mice is returned.
 }
 \description{
 Plot posterior similarity matrix
