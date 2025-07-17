@@ -215,9 +215,9 @@ HBMAP_mcmc <- function(Y = NULL,
           q_temp = rbind(q_temp, extraDistr::rdirichlet(1,alpha = Ycbind[,c] + 0.1 ))
         }
         mindist = min(dist(q_temp, method = "manhattan"))
-        if(mindist<tau){
-          print(paste('min dist between initial q is ', mindist))
-        }
+        # if(mindist<tau){
+        #   print(paste('min dist between initial q is ', mindist))
+        # }
       }
       # Allocate z based on closeness to q
       Z_new = lapply(1:M, function(m){

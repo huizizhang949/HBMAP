@@ -154,8 +154,8 @@ q_star_mcmc_cpp <- function(Y,
       }
       # Update Scaling factor
       scaling[j] = scaling[j] + n[j]^(-lambda)*(min(1, exp(log.accept.prob))- 0.234)
-      if(is.na(scaling[j])){
-        print('nan issues')}
+      # if(is.na(scaling[j])){
+      #   print('nan issues')}
       if(scaling[j] < 0.0001){scaling[j] <- 0.0001}
       if(scaling[j] > 10){scaling[j] <- 10}
       n[j] = n[j] +1
@@ -189,9 +189,9 @@ q_star_mcmc_cpp <- function(Y,
 
     }
 
-    if(!is.finite(accept.prob)){
-      print('issues with inf/nan')
-    }
+    # if(!is.finite(accept.prob)){
+    #   print('issues with inf/nan')
+    # }
 
 
     # Random Bernoulli
@@ -314,9 +314,9 @@ gamma_mcmc_cpp <- function(Y,
 
     }
 
-    if(!is.finite(accept.prob)){
-      print('issues with inf/nan')
-    }
+    # if(!is.finite(accept.prob)){
+    #   print('issues with inf/nan')
+    # }
 
     # Random Bernoulli
     outcome <- rbinom(n = 1,
@@ -457,9 +457,9 @@ component_probabilities_mcmc <- function(omega,
 
     sum(log(omega_new)) - sum(log(omega_old))
 
-  if(!is.finite(log_acceptance)){
-    print('issues with inf/nan')
-  }
+  # if(!is.finite(log_acceptance)){
+  #   print('issues with inf/nan')
+  # }
 
   # Random Bernoulli
   outcome <- rbinom(n = 1,
@@ -570,9 +570,9 @@ alpha_mcmc <- function(omega_J_M,
 
     log(alpha_new) - log(alpha_old)
 
-  if(!is.finite(log_acceptance)){
-    print('issues with inf/nan')
-  }
+  # if(!is.finite(log_acceptance)){
+  #   print('issues with inf/nan')
+  # }
 
   # Random Bernoulli
   outcome <- rbinom(n = 1,
@@ -651,9 +651,9 @@ alpha_zero_mcmc <- function(omega,
 
     log(alpha_zero_new) - log(alpha_zero_old)
 
-  if(!is.finite(log_acceptance)){
-    print('issues with inf/nan')
-  }
+  # if(!is.finite(log_acceptance)){
+  #   print('issues with inf/nan')
+  # }
 
   # Random Bernoulli
   outcome <- rbinom(n = 1,
