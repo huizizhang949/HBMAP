@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Launch Rstudio
-Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/huizizhang949/HBMAP/master?urlpath=rstudio)
+Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh//huizizhang949/HBMAP/tree/binder?urlpath=rstudio)
 <!-- badges: end -->
 
 The goal of HBMAP is to implement a model-based clustering approach
