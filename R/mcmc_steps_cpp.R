@@ -301,10 +301,8 @@ gamma_mcmc_cpp <- function(Y,
       # If component j is empty
 
       # Simulate from the prior
-      gamma_j_new <- cascsim::rtgamma(n = 1,
-                            shape = a_gamma,
-                            scale = 1/b_gamma,
-                            min = lb_gamma)
+      gamma_j_new <- truncdist::rtrunc(n = 1, spec = 'gamma', a = lb_gamma, b = Inf,
+                                       shape = a_gamma, scale = 1/b_gamma)
 
       # X_new
       X_j_new <- log(gamma_j_new - lb_gamma)

@@ -34,7 +34,7 @@ Imports:
     colorRamp2,
     coda,
     extraDistr,
-    cascsim,
+    truncdist,
     mvtnorm,
     mcclust,
     salso,
