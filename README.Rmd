@@ -22,10 +22,13 @@ knitr::knit_hooks$set(imgcenter = function(before, options, envir){
 
 # HBMAP
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 The goal of HBMAP is to implement a model-based clustering approach through hierarchical Bayesian mixtures for high-throughput mapping of axon projections. The model allows for identifying groups of neurons with unique projection patterns across different brain regions, and investigates differences across experiments.
+
+Demo scripts showcasing the functionality of HBMAP are available here:
+
+<!-- badges: start -->
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/EdwardAgboraw/HBMAP_binder/main?urlpath=rstudio)
+<!-- badges: end -->
 
 ## Installation
 
