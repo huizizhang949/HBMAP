@@ -260,7 +260,7 @@ HBMAP_mcmc <- function(Y = NULL,
     # Compute empirical mean of projection strength
     data.j.prior <- matrix(do.call(cbind, Y), nrow = R)
     pdata.j.prior <- apply(data.j.prior, 2, function(x){x/sum(x)})
-    data.j.mean <- rowMeans(pdata.j.prior) + 0.01
+    data.j.mean <- rowMeans(pdata.j.prior) + 0.1
     mx <- matrix(data.j.mean/sum(data.j.mean), nrow = 1)
     alpha_h <- a*mx
 
