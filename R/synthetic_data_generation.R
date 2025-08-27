@@ -25,9 +25,9 @@ data_simulation <- function(mcmc_run_all_output,
   length_per_chain <- length(mcmc_run_all_output$Z_output)
 
   J <- mcmc_run_all_output$J
-  # C_data <- mcmc_run_all_output$C
+  C_data <- mcmc_run_all_output$C
   R <- mcmc_run_all_output$R
-  # M_data <- mcmc_run_all_output$M
+  M_data <- mcmc_run_all_output$M
 
   if(is.null(regions.name)){
     regions.name <- paste('region', 1:R)
@@ -35,7 +35,7 @@ data_simulation <- function(mcmc_run_all_output,
 
 
   # Sum of counts for each neuron in the real data
-  N_CM <- lapply(1:M,
+  N_CM <- lapply(1:M_data,
                  function(m) colSums(Y[[m]]))
   min_N <- min(unlist(N_CM))
 
