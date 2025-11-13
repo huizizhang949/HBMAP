@@ -78,14 +78,24 @@ heatmap_ps <- function(Y,
   # group index
   group.index.df <- lapply(cluster.index,
                            function(j){
+                             
+                             mx0 <- matrix(Y.prop.cbind[,which(unlist(Z)==j)],
+                                           nrow = R)
+                             
+                             strong.proj.j <- which(rowSums(mx0) == max(rowSums(mx0)))[1]
 
                              df0_list <- lapply(1:M, function(m){
 
 
                                if(length(which(Z[[m]]==j)) != 0){
+                                 
+                                 mx0_m <- matrix(Y1.prop[[m]][,which(Z[[m]]==j)],
+                                                 nrow = R1)
 
-                                 group.index.list[[m]][which(Z[[m]]==j)]
+                                 g0_m <- group.index.list[[m]][which(Z[[m]]==j)]
                                  # rep(m, length(which(Z[[m]]==j)))
+                                 
+                                 g0_m[order(mx0_m[strong.proj.j,])]
                                }
 
                              })
