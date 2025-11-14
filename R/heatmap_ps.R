@@ -89,8 +89,8 @@ heatmap_ps <- function(Y,
 
                                if(length(which(Z[[m]]==j)) != 0){
                                  
-                                 mx0_m <- matrix(Y1.prop[[m]][,which(Z[[m]]==j)],
-                                                 nrow = R1)
+                                 mx0_m <- matrix(Y.prop[[m]][,which(Z[[m]]==j)],
+                                                 nrow = R)
 
                                  g0_m <- group.index.list[[m]][which(Z[[m]]==j)]
                                  # rep(m, length(which(Z[[m]]==j)))
