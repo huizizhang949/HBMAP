@@ -165,5 +165,5 @@ heatmap_ps <- function(Y,
   if(!is.null(col)){
     gg <- gg+scale_fill_manual(values=col)
   }
-  print(gg)
+  return(gg)
 }

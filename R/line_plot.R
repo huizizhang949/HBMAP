@@ -191,7 +191,7 @@ plot_estimated_ps <- function(ps_summary,
     if(!is.null(col)){
       gg+scale_color_manual(values=col)
     }else{
-      print(gg)
+      return(gg)
     }
 }
 
