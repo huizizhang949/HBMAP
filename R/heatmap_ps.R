@@ -39,7 +39,8 @@ heatmap_ps <- function(Y,
   }
 
   # turn group.index into a list for each dataset
-  group.index.list <- lapply(1:M, function(m) group.index[(1+C_cumsum[m]):C_cumsum[m+1]])
+  group.index.list <- group.index
+  group.index <- unlist(group.index)
 
   Y.cbind <- do.call(cbind, Y)
   Y.prop.cbind <- matrix(as.vector(Y.cbind)/rep(colSums(Y.cbind), each = R),
@@ -47,26 +48,26 @@ heatmap_ps <- function(Y,
 
   Y.prop <- lapply(1:M, function(m) matrix(Y[[m]]/rep(colSums(Y[[m]]), each = R),
                                            nrow = R))
-
+  Z_unlist = unlist(Z)
 
   # Re-ordered projection strength
   df0 <- lapply(cluster.index,
                 function(j){
 
 
-                  mx0 <- matrix(Y.prop.cbind[,which(unlist(Z)==j)],
+                  mx0 <- matrix(Y.prop.cbind[,which(Z_unlist==j)],
                                 nrow = R)
 
                   strong.proj.j <- which(rowSums(mx0) == max(rowSums(mx0)))[1]
 
-                  df0_list <- lapply(1:M, function(m){
+                  df0_list <- lapply(unique(group.index), function(m){
 
-                    if(length(which(Z[[m]]==j)) != 0){
+                    if(sum((Z_unlist==j)&(group.index==m)) != 0){
 
-                      mx0_m <- matrix(Y.prop[[m]][,which(Z[[m]]==j)],
-                                      nrow = R)
+                      mx0_m <- matrix( Y.prop.cbind[,which((Z_unlist==j)&(group.index==m))], 
+                                       nrow = R)
 
-                      mx0_m[,order(mx0_m[strong.proj.j,])]
+                      mx0_m[,sort(mx0_m[strong.proj.j,],decreasing = TRUE, index.return=TRUE)$ix]
                     }
 
                   })
@@ -79,23 +80,24 @@ heatmap_ps <- function(Y,
   group.index.df <- lapply(cluster.index,
                            function(j){
                              
-                             mx0 <- matrix(Y.prop.cbind[,which(unlist(Z)==j)],
+                             mx0 <- matrix(Y.prop.cbind[,which(Z_unlist==j)],
                                            nrow = R)
                              
                              strong.proj.j <- which(rowSums(mx0) == max(rowSums(mx0)))[1]
 
-                             df0_list <- lapply(1:M, function(m){
+                             df0_list <- lapply(unique(group.index), function(m){
 
 
-                               if(length(which(Z[[m]]==j)) != 0){
+                               if(sum((Z_unlist==j)&(group.index==m)) != 0){
                                  
-                                 mx0_m <- matrix(Y.prop[[m]][,which(Z[[m]]==j)],
+                                 mx0_m <- matrix(Y.prop.cbind[,which((Z_unlist==j)&(group.index==m))],
                                                  nrow = R)
-
-                                 g0_m <- group.index.list[[m]][which(Z[[m]]==j)]
+                                 
+                                 g0_m <- group.index[which((Z_unlist==j)&(group.index==m))]
                                  # rep(m, length(which(Z[[m]]==j)))
                                  
-                                 g0_m[order(mx0_m[strong.proj.j,])]
+                                 g0_m[sort(mx0_m[strong.proj.j,],decreasing = TRUE, index.return=TRUE)$ix]
+                                 
                                }
 
                              })
@@ -110,12 +112,12 @@ heatmap_ps <- function(Y,
   df0 <- do.call(cbind, df0)
 
   N.j <- sapply(cluster.index,
-                function(j) length(which(unlist(Z)==j)))
+                function(j) length(which(Z_unlist==j)))
 
   # Convert to data frame for plotting
   # subset for cluster.index
-  index <- unlist(lapply(1:M,function(m) {
-    sapply(Z[[m]],function(x) x %in% cluster.index)
+  index <- unlist(lapply(unique(group.index),function(m) {
+    sapply(Z[group.index==m],function(x) x %in% cluster.index)
   }))
   Y.prop.df <- data.frame(region = rep(regions.name,
                                        ncol(Y.prop.cbind[,index])),
