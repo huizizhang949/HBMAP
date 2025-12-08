@@ -18,6 +18,13 @@ allocation_variables_dirmult_mcmc_cpp <- function(omega_J_M,
 
     Prob_m <- compute_probability_cpp(Y = Y[[m]], omega_M = omega_J_M[,m], q_star_1_J = q_star_1_J, gamma_1_J_star = gamma_1_J_star)
 
+    if(any(is.na(Prob_m))){
+      warning("NA values in allocation probability matrix.")
+      # set NA valus to 0 and rescale the probabilities to sum to one
+      Prob_m[is.na(Prob_m)] <- 0
+      Prob_m <- t(apply(Prob_m, 1, function(x) x/sum(x)))
+    }
+
     ##-- Store Z
     # Z[[m]] <- apply(Prob_m, 1, function(x) extraDistr::rcat(n = 1, prob = x))
     Z[[m]] <- Z_sample_cpp(Prob_m)
