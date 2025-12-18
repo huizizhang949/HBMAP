@@ -480,3 +480,27 @@ Y_sim <- data_simulation(mcmc_run_all_output = mcmc_all_hans, Y = data_Hans,
                          M = 4, C = C, noise.levels = list(0.01,0.05))
 ```
 
+# Warning on Spike-In Normalization
+
+Spike-in normalization is a standard step in the analysis of MAPseq data, but 
+can introduce extremely low / fractional barcode counts which conflict with
+core HBMAP functionality. 
+
+We currently recommend scaling your MAPseq data post spike-in normalization by
+some constant (e.g. 1000, or the spike-in value of the negative control) prior 
+to HBMAP analysis, as shown in the example below:
+
+```{r}
+
+# apply spike_in normalization to MAPseq data.frame
+norm_data = spike_norm(raw_data, spike_in_counts)
+
+# extract negative control spike_in count
+negative_control_spike_value = spike_in_counts$negative_control
+
+# scale data by negative control spike_in_count
+scaled_data = norm_data * negative_control_spike_value
+
+```
+
+
