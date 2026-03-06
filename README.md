@@ -12,7 +12,9 @@ investigates differences across experiments.
 Demo scripts showcasing the functionality of HBMAP are available here:
 
 <!-- badges: start -->
-[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/EdwardAgboraw/HBMAP_binder/main?urlpath=rstudio)
+
+[![Launch Rstudio
+Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/EdwardAgboraw/HBMAP_binder/main?urlpath=rstudio)
 <!-- badges: end -->
 
 ## Installation
@@ -30,7 +32,9 @@ First, we load the data and necessary functions for MCMC sampling.
 ``` r
 # load required packages
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.3.3
 library(ggrepel)
+#> Warning: package 'ggrepel' was built under R version 4.3.3
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
@@ -40,9 +44,6 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
-```
-
-``` r
 library(HBMAP)
 ```
 
@@ -116,13 +117,13 @@ b_gamma = 2
 ``` r
 # ---- parameters to pass to the main function ------
 # mcmc setup
-mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop = 0.0001,
+mcmc_list = list(number_iter = 20000, thinning = 5, burn_in = 5000, adaptive_prop = 0.0001,
                  auto_save = FALSE,
                  save_path = NULL,
                  save_frequency = 1000
                  )
 # prior parameters, default values will be used if not provided
-prior_list = list(a_gamma = a_gamma, b_gamma = b_gamma, lb_gamma = 1, a = 2, tau = 0.4, nu = 1/20,
+prior_list = list(a_gamma = a_gamma, b_gamma = b_gamma, lb_gamma = 1, a = 2, tau = 0.2, nu = 1/20,
                   a_alpha = a_alpha, b_alpha = 1, a_alpha0 = a_alpha0, b_alpha0 = 1)
 
 
@@ -236,12 +237,12 @@ psm_hans_plot
 
 ``` r
 
-mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop = 0.0001,
+mcmc_list = list(number_iter = 15000, thinning = 1, burn_in = 5000, adaptive_prop = 0.0001,
                  auto_save = FALSE,
                  save_path = NULL,
                  save_frequency = 1000
                  )
-prior_list = list(a_gamma = a_gamma, b_gamma = b_gamma, lb_gamma = 1, a = 2, tau = 0.4, nu = 1/20,
+prior_list = list(a_gamma = a_gamma, b_gamma = b_gamma, lb_gamma = 1, a = 2, tau = 0.2, nu = 1/20,
                   a_alpha = a_alpha, b_alpha = 1, a_alpha0 = a_alpha0, b_alpha0 = 1)
 
 # for the post-processing step, there is no label switching and we can make inference for each cluster based on q, gamma and weights
@@ -399,7 +400,7 @@ We identify variable motifs by comparing the variance of the
 brain-specific weights across mice with a null model.
 
 ``` r
-mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop = 0.0001,
+mcmc_list = list(number_iter = 15000, thinning = 5, burn_in = 5000, adaptive_prop = 0.0001,
                  auto_save = FALSE,
                  save_path = NULL,
                  save_frequency = 1000
@@ -437,7 +438,7 @@ local_weights_analysis_vc %>%
   xlab('variance of local weights')+
   ylab('probability of observing larger variance')+
   geom_hline(yintercept = 0.95)
-#> Warning: ggrepel: 6 unlabeled data points (too many overlaps). Consider
+#> Warning: ggrepel: 10 unlabeled data points (too many overlaps). Consider
 #> increasing max.overlaps
 ```
 
@@ -460,8 +461,6 @@ local_weights_analysis_vc %>%
   ylab('probability of global weight>0.02')+
   geom_hline(yintercept = 0.95) +
   geom_vline(xintercept = 0.02)
-#> Warning: ggrepel: 8 unlabeled data points (too many overlaps). Consider
-#> increasing max.overlaps
 ```
 
 <img src="man/figures/README-variable motif plot-2.png" width="60%" style="display: block; margin: auto;" />
