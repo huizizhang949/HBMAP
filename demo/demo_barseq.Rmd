@@ -208,7 +208,7 @@ psm_hans_plot
 
 ```{r post-processing step}
 
-mcmc_list = list(number_iter = 15000, thinning = 5, burn_in = 5000, adaptive_prop = 0.0001,
+mcmc_list = list(number_iter = 15000, thinning = 1, burn_in = 5000, adaptive_prop = 0.0001,
                  auto_save = FALSE,
                  save_path = NULL,
                  save_frequency = 1000
