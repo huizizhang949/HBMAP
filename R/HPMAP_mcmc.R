@@ -5,9 +5,9 @@
 #' @param J integer. Number of clusters to be found. Mandatory to run the full algorithm.
 #' @param mcmc a list of MCMC arguments:
 #' \itemize{
-#' \item \code{number_iter}, number of iterations. Default to 6000.
-#' \item \code{burn_in}, number of iterations to discard as burn-in. Default to 3000.
-#' \item \code{thinning}, after burn-in, save the sample at every \code{thinning} iterations. Default to 5.
+#' \item \code{number_iter}, number of iterations. Default to 10000.
+#' \item \code{burn_in}, number of iterations to discard as burn-in. Default to 5000.
+#' \item \code{thinning}, after burn-in, save the sample at every \code{thinning} iterations. Default to 1.
 #' \item \code{adaptive_prop}, a small positive constant used in adaptive MCMC algorithm.
 #' A larger value will propose a new sample more likely to be different from the previous sample. Default to 0.001.
 #' \item \code{auto_save, save_path, save_frequency}, If \code{auto_save} is \code{TRUE} (default is \code{FALSE}), intermediate results will be saved
@@ -21,7 +21,7 @@
 #' \item \code{a, tau, nu}, parameters in the repulsive prior of \eqn{\bm{q}_{1:J}}.
 #' The concentration parameters in the Dirichlet prior are given by \code{a}*(average empirical projection strength across mice).
 #' \code{tau,nu} are relevant to the repulsive term, where \code{tau} represents the separation between components
-#' and \code{nu} denotes how strong the repulsion is. Default values are 2, 0.4, 1/20.
+#' and \code{nu} denotes how strong the repulsion is. Default values are 2, 0.2, 1/20.
 #' \item \code{a_alpha, b_alpha}, shape and rate parameters for the concentration parameter in the mouse-specific Dirichlet process. Both are default to 1.
 #' \item \code{a_alpha0, b_alpha0}, shape and rate parameters for the concentration parameter in the baseline Dirichlet process. Both are default to 1.
 #' }
@@ -51,7 +51,7 @@
 #' @export
 #'
 #' @examples
-#' mcmc_list = list(number_iter = 5000, thinning = 1, burn_in = 4000, adaptive_prop = 0.0001,
+#' mcmc_list = list(number_iter = 10000, thinning = 1, burn_in = 5000, adaptive_prop = 0.0001,
 #'       auto_save = FALSE, save_path = NULL, save_frequency = 1000)
 #' set.seed(3)
 #' mcmc_all_run <- HBMAP_mcmc(Y = Y, J = J, mcmc = mcmc_list, verbose = FALSE)
@@ -109,9 +109,9 @@ HBMAP_mcmc <- function(Y = NULL,
   if(!is.null(post$run_q_gamma) && !is.logical(post$run_q_gamma)) stop("post$run_q_gamma must be a logical value")
 
   # mcmc settings (default)
-  if(is.null(mcmc$number_iter)) {number_iter = 6000} else {number_iter = mcmc$number_iter}
-  if(is.null(mcmc$thinning)) {thinning = 5} else {thinning = mcmc$thinning}
-  if(is.null(mcmc$burn_in)) {burn_in = 3000} else {burn_in = mcmc$burn_in}
+  if(is.null(mcmc$number_iter)) {number_iter = 10000} else {number_iter = mcmc$number_iter}
+  if(is.null(mcmc$thinning)) {thinning = 1} else {thinning = mcmc$thinning}
+  if(is.null(mcmc$burn_in)) {burn_in = 5000} else {burn_in = mcmc$burn_in}
   if(is.null(mcmc$adaptive_prop)) {adaptive_prop = 0.001} else {adaptive_prop = mcmc$adaptive_prop}
   if(is.null(mcmc$auto_save)) {auto_save = FALSE} else {auto_save = mcmc$auto_save}
   if(is.null(mcmc$save_frequency)) {save_frequency = 100} else {save_frequency = mcmc$save_frequency}
@@ -122,7 +122,7 @@ HBMAP_mcmc <- function(Y = NULL,
   if(is.null(prior$b_gamma)) {b_gamma = 2} else {b_gamma = prior$b_gamma}
   if(is.null(prior$lb_gamma)) {lb_gamma = 1} else {lb_gamma = prior$lb_gamma}
   if(is.null(prior$a)) {a = 2} else {a = prior$a}
-  if(is.null(prior$tau)) {tau = 0.4} else {tau = prior$tau}
+  if(is.null(prior$tau)) {tau = 0.2} else {tau = prior$tau}
   if(is.null(prior$nu)) {nu = 1/20} else {nu = prior$nu}
   if(is.null(prior$a_alpha)) {a_alpha = 1} else {a_alpha = prior$a_alpha}
   if(is.null(prior$b_alpha)) {b_alpha = 1} else {b_alpha = prior$b_alpha}
