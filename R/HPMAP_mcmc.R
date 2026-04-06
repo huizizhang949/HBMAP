@@ -334,7 +334,8 @@ HBMAP_mcmc <- function(Y = NULL,
 
                                     }else{
 
-                                      mx2 <- cascsim::rtgamma(1,shape = a_gamma, scale = 1/b_gamma, min = lb_gamma)
+                                      mx2 <- truncdist::rtrunc(n = 1, spec = 'gamma', a = lb_gamma, b = Inf,  
+                                                               shape = a_gamma, scale = 1/b_gamma)
                                     }
 
                                     mx2
