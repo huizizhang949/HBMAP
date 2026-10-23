@@ -9,6 +9,9 @@ axon projections. The model allows for identifying groups of neurons
 with unique projection patterns across different brain regions, and
 investigates differences across experiments.
 
+The paper is available on [bioRxiv](https://www.biorxiv.org/content/10.1101/2025.07.24.666115v1), entitled 
+HBMAP: Bayesian inference of neural circuits from DNA barcoded projection mapping by Wade, Agboraw, Liu, Zhang, Surmeli (2026).
+
 Demo scripts showcasing the functionality of HBMAP are available here:
 
 <!-- badges: start -->
